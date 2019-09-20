@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://www.traen.com/2008/01/20" elementFormDefault="qualified" targetNamespace="http://www.traen.com/2008/01/20" id="schema23" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://www.traen.com/2007/04/01" />
+  <xs:element name="GetCaseTypeListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:complexType name="EmptyRequestType" />
+  <xs:element name="CaseTypeListResponse" type="tns:ArrayOfCaseTypeType" />
+  <xs:complexType name="ArrayOfCaseTypeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CaseType" type="tns:CaseTypeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CaseTypeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsPublic" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ComplaintAccess" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetCaseStatusListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="CaseStatusListResponse" type="tns:ArrayOfCaseStatusType" />
+  <xs:complexType name="ArrayOfCaseStatusType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CaseStatus" type="tns:CaseStatusType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CaseStatusType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsClosed" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsExpired" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsTemporary" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetDocumentTypeListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="DocumentTypeListResponse" type="tns:ArrayOfDocumentTypeType" />
+  <xs:complexType name="ArrayOfDocumentTypeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DocumentType" type="tns:DocumentTypeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DocumentTypeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetMainDocumentTypeListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="MainDocumentTypeListResponse" type="tns:ArrayOfMainDocumentTypeType" />
+  <xs:complexType name="ArrayOfMainDocumentTypeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MainDocumentType" type="tns:MainDocumentTypeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MainDocumentTypeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AssignExternalRecipient" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AssignInternalRecipient" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsExternallyProduced" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RequiresFollowUp" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetDocumentStatusListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="DocumentStatusListResponse" type="tns:ArrayOfDocumentStatusType" />
+  <xs:complexType name="ArrayOfDocumentStatusType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DocumentStatus" type="tns:DocumentStatusType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DocumentStatusType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetMainDocumentStatusListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="MainDocumentStatusListResponse" type="tns:ArrayOfMainDocumentStatusType" />
+  <xs:complexType name="ArrayOfMainDocumentStatusType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MainDocumentStatus" type="tns:MainDocumentStatusType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MainDocumentStatusType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetDocumentCategoryListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="DocumentCategoryListResponse" type="tns:ArrayOfDocumentCategoryType" />
+  <xs:complexType name="ArrayOfDocumentCategoryType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DocumentCategory" type="tns:DocumentCategoryType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DocumentCategoryType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccessCodeRequest" type="tns:AccessCodeRequestType" />
+  <xs:complexType name="AccessCodeRequestType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="UserId" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="AdminUnitId" type="xs:integer" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccessCodeListResponse" type="tns:ArrayOfAccessCodeType" />
+  <xs:complexType name="ArrayOfAccessCodeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccessCode" type="tns:AccessCodeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AccessCodeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Code" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ActivationDate" type="xs:date" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DeactivationDate" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetAccessLevelListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="AccessLevelListResponse" type="tns:ArrayOfAccessLevelType" />
+  <xs:complexType name="ArrayOfAccessLevelType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccessLevel" type="tns:AccessLevelType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AccessLevelType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Id" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Title" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccessGroupRequest" type="tns:AccessGroupRequestType" />
+  <xs:complexType name="AccessGroupRequestType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="UserId" type="xs:integer" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AccessGroupListResponse" type="tns:ArrayOfAccessGroupType" />
+  <xs:complexType name="ArrayOfAccessGroupType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AccessGroup" type="tns:AccessGroupType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AccessGroupType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Id" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetAdminUnitListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="AdminUnitListResponse" type="tns:ArrayOfAdminUnitType" />
+  <xs:complexType name="ArrayOfAdminUnitType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AdminUnit" type="tns:AdminUnitType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AdminUnitType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Id" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="UnitType" type="tns:AdminUnitTypeType" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Parent" nillable="true" type="tns:AdminUnitType" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Children" nillable="true" type="tns:ArrayOfAdminUnitType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AdminUnitTypeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ParentLiteralId" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetUserListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="UserListResponse" type="tns:ArrayOfUserType" />
+  <xs:complexType name="ArrayOfUserType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="User" type="tns:UserType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="UserType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Id" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Initials" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PrimaryAdminUnitRequest" type="tns:UserPrimaryAdminUnitRequestType" />
+  <xs:complexType name="UserPrimaryAdminUnitRequestType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="UserId" type="xs:integer" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PrimaryAdminUnitResponse" type="tns:AdminUnitType" />
+  <xs:element name="GetCategoryListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="CategoryListResponse" type="tns:ArrayOfClassificationCategoryType" />
+  <xs:complexType name="ArrayOfClassificationCategoryType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Category" type="tns:ClassificationCategoryType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ClassificationCategoryType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Title" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DefaultDiscardRule" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="UseInClassification" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Principle" type="tns:PrincipleType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LifecycleInfo" type="tns:LifecycleInfoType" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DeletionCode" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PrincipleType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Title" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="UseInClassification" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PrincipleType" type="tns:PrincipleTypeType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PrincipleTypeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LifecycleInfoType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CreationDate" type="xs:date" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ExpirationDate" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GetDiscardRuleListEmptyRequest" type="tns:EmptyRequestType" />
+  <xs:element name="DiscardRuleListResponse" type="tns:ArrayOfDiscardRuleType" />
+  <xs:complexType name="ArrayOfDiscardRuleType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DiscardRule" type="tns:DiscardRuleType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DiscardRuleType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DiscardRuleExpression" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ErrorCode" type="xs:string" />
+  <xs:element xmlns:q1="http://www.traen.com/2007/04/01" name="ErrorType" type="q1:ErrorListEnum" />
+  <xs:element name="CaseTypeLiteral" type="xs:string" />
+  <xs:element name="PartyRelationList" type="tns:ArrayOfPartyRelationType" />
+  <xs:complexType name="ArrayOfPartyRelationType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PartyRelation" type="tns:PartyRelationType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PartyRelationType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Literal" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsUnique" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

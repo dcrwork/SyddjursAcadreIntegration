@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://www.traen.com/2008/01/30" elementFormDefault="qualified" targetNamespace="http://www.traen.com/2008/01/30" id="schema22" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://www.traen.com/2007/04/01" />
+  <xs:complexType name="CaseFileType2">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://www.traen.com/2007/04/01" base="q1:CaseFileType1">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MultiCaseId" type="xs:integer" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NumberOfMemos" type="xs:integer" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AdvancedCaseSearchRequestType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="AdministrativeUnitId" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ResponsibleUserId" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="AccessLevelId" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TypeCode" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Title" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Content" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="MultiCaseId" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StatusCode" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Keyword" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MainDocumentSearchRequestType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="SearchText" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SearchIn" type="tns:CaseSearchInEnum" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CaseId" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ResponsibleUserId" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DocumentStatusId" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DocumentTypeId" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="MultiCaseId" type="xs:integer" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CaseStatusCode" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="AdministrativeUnitId" type="xs:integer" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="CaseSearchInEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Title" />
+      <xs:enumeration value="Description" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

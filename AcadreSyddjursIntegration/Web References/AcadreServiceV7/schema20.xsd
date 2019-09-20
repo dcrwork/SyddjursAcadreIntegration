@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://www.traen.com/2008/08/20" elementFormDefault="qualified" targetNamespace="http://www.traen.com/2008/08/20" id="schema20" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://www.traen.com/2006/08/01/case" />
+  <xs:import namespace="http://www.traen.com/2007/04/01" />
+  <xs:import namespace="http://www.traen.com/2008/01/30" />
+  <xs:element name="GetCurrentMultiCaseType">
+    <xs:complexType />
+  </xs:element>
+  <xs:element name="GetCurrentMultiCaseTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" name="GetCurrentMultiCaseTypeResult" type="tns:SystemMulticaseSettingsType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="SystemMulticaseSettingsType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SimpleMultiCase" />
+      <xs:enumeration value="AdvancedMultiCase" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="CreateAdvancedMultiCaseRequest" type="tns:AdvancedMultiCaseType" />
+  <xs:complexType name="AdvancedMultiCaseType">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:MultiCaseType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Number" type="xs:nonNegativeInteger" />
+          <xs:element xmlns:q1="http://www.traen.com/2006/08/01/case" minOccurs="0" maxOccurs="1" ref="q1:Year" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MultiCaseType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="MultiCaseId" type="xs:nonNegativeInteger" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Title" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CreatedBy" type="xs:nonNegativeInteger" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CreationDate" type="xs:date" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ForeignId" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OrgUnitId" type="xs:nonNegativeInteger" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RelationTypeId" type="xs:nonNegativeInteger" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MultiCaseIdentifier" type="xs:nonNegativeInteger" />
+  <xs:element name="UpdateAdvancedMultiCaseRequest" type="tns:AdvancedMultiCaseType" />
+  <xs:element name="CreateCaseRequest" type="tns:CreateCaseRequestType" />
+  <xs:complexType name="CreateCaseRequestType">
+    <xs:sequence>
+      <xs:element xmlns:q2="http://www.traen.com/2007/04/01" minOccurs="0" maxOccurs="1" name="CaseFile" type="q2:CaseFileType1" />
+      <xs:element minOccurs="0" maxOccurs="1" name="MultiCaseIdentifiers" type="tns:ArrayOfNonNegativeInteger" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RecordType1">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://www.traen.com/2006/08/01/case" base="q3:RecordType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Deadline" type="tns:DeadlineType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="EvenOutRequired" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DeadlineType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CreationDate" type="xs:date" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CreatorID" type="xs:nonNegativeInteger" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DeadlineDate" type="xs:date" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Note" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CaseFileType2">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q4="http://www.traen.com/2007/04/01" base="q4:CaseFileType1">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Deadline" type="tns:DeadlineType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OBSDate" type="tns:CaseOBSDateType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CaseOBSDateType">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CreationDate" type="xs:date" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CreatorID" type="xs:nonNegativeInteger" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OBSDate" type="xs:date" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Note" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfNonNegativeInteger">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MultiCaseIdentifier" type="xs:nonNegativeInteger" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CreateCaseResponse" type="tns:CreateCaseResponseType" />
+  <xs:complexType name="CreateCaseResponseType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="CaseFileIdentifier" type="xs:nonNegativeInteger" />
+      <xs:element minOccurs="0" maxOccurs="1" name="MultiCaseIdentifiers" type="tns:ArrayOfNonNegativeInteger" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CreateCaseAndAMCResult" type="tns:CreateCaseAndAMCResultType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="CreateCaseAndAMCResultType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CaseCreated" />
+      <xs:enumeration value="CaseCrearedAndAttachedToAMC" />
+      <xs:enumeration value="CaseNotCreatedAndListAMCReceived" />
+      <xs:enumeration value="CaseCreatedAndAMCCreated" />
+      <xs:enumeration value="CaseCreatedAndAMCNotCreated" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="CaseFileIdentifier" type="xs:nonNegativeInteger" />
+  <xs:element name="UpdateCaseRequest" type="tns:CaseFileType2" />
+  <xs:complexType name="AdvancedSearchCaseCriterionType">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://www.traen.com/2007/04/01" base="q5:SearchCaseCriterionType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ClassificationCriterion" type="tns:ClassificationCriterionType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ClassificationCriterionType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="PrincipleLiteral" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ClassificationLiteral" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element xmlns:q6="http://www.traen.com/2007/04/01" name="ArrayOfCases" type="q6:ArrayOfCaseSearchResponseType" />
+  <xs:complexType name="AdvancedCaseSearchRequestType2">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q7="http://www.traen.com/2008/01/30" base="q7:AdvancedCaseSearchRequestType" />
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MainDocumentSearchRequestType2">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q8="http://www.traen.com/2008/01/30" base="q8:MainDocumentSearchRequestType" />
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

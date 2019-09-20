@@ -1,0 +1,1547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.traen.com/2010/06/01/schema" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.traen.com/2010/06/01/schema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema targetNamespace="http://www.traen.com/2010/06/01/schema">
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema1" namespace="http://www.traen.com/2007/11/01" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema2" namespace="http://rep.oio.dk/fesd.dk/xml/schemas/2005/10/26/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema3" namespace="http://rep.oio.dk/xkom.dk/xml/schemas/2005/05/13/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema4" namespace="http://rep.oio.dk/xkom.dk/xml/schemas/2005/03/15/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema5" namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema6" namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2003/02/13/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema7" namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/03/15/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema8" namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/13/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema9" namespace="http://www.traen.com/2007/04/01" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema10" namespace="http://rep.oio.dk/itst.dk/xml/schemas/2005/09/01/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema11" namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/09/01/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema12" namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/10/31/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema13" namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/19/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema14" namespace="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema15" namespace="http://rep.oio.dk/itst.dk/xml/schemas/2005/02/22/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema16" namespace="http://www.traen.com/2010/06/01" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema17" namespace="http://rep.oio.dk/kms.dk/xml/schemas/2005/03/11/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema18" namespace="http://rep.oio.dk/ebxml/xml/schemas/dkcc/2005/05/09/" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema19" namespace="http://www.traen.com/2007/11/02/schema" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema20" namespace="http://www.traen.com/2008/08/20" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema21" namespace="http://www.traen.com/2006/08/01/case" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema22" namespace="http://www.traen.com/2008/01/30" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema23" namespace="http://www.traen.com/2008/01/20" />
+      <s:import schemaLocation="http://esdhtest2/acadre/Acadre.CM.PublicServices/SoapAuth/AcadreServiceV7.asmx?schema=schema24" namespace="http://www.traen.com/2007/09/06/schema" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetCurrentMultiCaseTypeSoapIn">
+    <wsdl:part xmlns:q1="http://www.traen.com/2008/08/20" name="parameters" element="q1:GetCurrentMultiCaseType" />
+  </wsdl:message>
+  <wsdl:message name="GetCurrentMultiCaseTypeSoapOut">
+    <wsdl:part xmlns:q2="http://www.traen.com/2008/08/20" name="parameters" element="q2:GetCurrentMultiCaseTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateAdvancedMultiCaseSoapIn">
+    <wsdl:part xmlns:q3="http://www.traen.com/2008/08/20" name="CreateAdvancedMultiCaseRequest" element="q3:CreateAdvancedMultiCaseRequest" />
+  </wsdl:message>
+  <wsdl:message name="CreateAdvancedMultiCaseSoapOut">
+    <wsdl:part xmlns:q4="http://www.traen.com/2008/08/20" name="CreateAdvancedMultiCaseResult" element="q4:MultiCaseIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="GetAdvancedMultiCaseSoapIn">
+    <wsdl:part xmlns:q5="http://www.traen.com/2008/08/20" name="MultiCaseIdentifier" element="q5:MultiCaseIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="GetAdvancedMultiCaseSoapOut">
+    <wsdl:part xmlns:q6="http://www.traen.com/2010/06/01" name="GetAdvancedMultiCaseResult" element="q6:AdvancedMultiCase2" />
+  </wsdl:message>
+  <wsdl:message name="UpdateAdvancedMultiCaseSoapIn">
+    <wsdl:part xmlns:q7="http://www.traen.com/2008/08/20" name="UpdateAdvancedMultiCaseRequest" element="q7:UpdateAdvancedMultiCaseRequest" />
+  </wsdl:message>
+  <wsdl:message name="UpdateAdvancedMultiCaseSoapOut">
+    <wsdl:part xmlns:q8="http://www.traen.com/2008/08/20" name="UpdateAdvancedMultiCaseResult" element="q8:MultiCaseIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="AppendContactToAdvancedMultiCaseSoapIn">
+    <wsdl:part xmlns:q9="http://www.traen.com/2010/06/01" name="parameters" element="q9:AppendContactToAdvancedMultiCaseRequest" />
+  </wsdl:message>
+  <wsdl:message name="AppendContactToAdvancedMultiCaseSoapOut">
+    <wsdl:part xmlns:q10="http://www.traen.com/2010/06/01" name="parameters" element="q10:AppendContactToAdvancedMultiCaseResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAdvancedMultiCaseContactsSoapIn">
+    <wsdl:part xmlns:q11="http://www.traen.com/2010/06/01" name="parameters" element="q11:GetAdvancedMultiCaseContactsRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAdvancedMultiCaseContactsSoapOut">
+    <wsdl:part xmlns:q12="http://www.traen.com/2010/06/01" name="parameters" element="q12:GetAdvancedMultiCaseContactsResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveContactFromAdvancedMultiCaseSoapIn">
+    <wsdl:part xmlns:q13="http://www.traen.com/2010/06/01" name="parameters" element="q13:RemoveContactFromAdvancedMultiCaseRequest" />
+  </wsdl:message>
+  <wsdl:message name="RemoveContactFromAdvancedMultiCaseSoapOut">
+    <wsdl:part xmlns:q14="http://www.traen.com/2010/06/01" name="parameters" element="q14:RemoveContactFromAdvancedMultiCaseResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateCaseSoapIn">
+    <wsdl:part xmlns:q15="http://www.traen.com/2008/08/20" name="CreateCaseRequest" element="q15:CreateCaseRequest" />
+  </wsdl:message>
+  <wsdl:message name="CreateCaseSoapOut">
+    <wsdl:part xmlns:q16="http://www.traen.com/2008/08/20" name="CreateCaseResult" element="q16:CreateCaseResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseSoapIn">
+    <wsdl:part xmlns:q17="http://www.traen.com/2008/08/20" name="CaseFileIdentifier" element="q17:CaseFileIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseSoapOut">
+    <wsdl:part xmlns:q18="http://www.traen.com/2010/06/01" name="GetCaseResult" element="q18:CaseFile3" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCaseSoapIn">
+    <wsdl:part xmlns:q19="http://www.traen.com/2008/08/20" name="UpdateCaseRequest" element="q19:UpdateCaseRequest" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCaseSoapOut">
+    <wsdl:part xmlns:q20="http://www.traen.com/2008/08/20" name="UpdateCaseResult" element="q20:CaseFileIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="SearchCasesSoapIn">
+    <wsdl:part xmlns:q21="http://www.traen.com/2010/06/01" name="AdvancedSearchCaseCriterion2" element="q21:AdvancedSearchCaseCriterion2" />
+  </wsdl:message>
+  <wsdl:message name="SearchCasesSoapOut">
+    <wsdl:part xmlns:q22="http://www.traen.com/2008/08/20" name="SearchCasesResult" element="q22:ArrayOfCases" />
+  </wsdl:message>
+  <wsdl:message name="GetIdentityNumbersFromCasesSoapIn">
+    <wsdl:part xmlns:q23="http://www.traen.com/2010/06/01" name="parameters" element="q23:GetIdentityNumbersFromCases" />
+  </wsdl:message>
+  <wsdl:message name="GetIdentityNumbersFromCasesSoapOut">
+    <wsdl:part xmlns:q24="http://www.traen.com/2010/06/01" name="parameters" element="q24:GetIdentityNumbersFromCasesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCasesForIdentitySoapIn">
+    <wsdl:part xmlns:q25="http://www.traen.com/2010/06/01" name="parameters" element="q25:GetCasesForIdentity" />
+  </wsdl:message>
+  <wsdl:message name="GetCasesForIdentitySoapOut">
+    <wsdl:part xmlns:q26="http://www.traen.com/2010/06/01" name="parameters" element="q26:GetCasesForIdentityResponse" />
+  </wsdl:message>
+  <wsdl:message name="AdvancedCaseSearchSoapIn">
+    <wsdl:part xmlns:q27="http://www.traen.com/2010/06/01" name="AdvancedCaseSearchRequest" element="q27:AdvancedCaseSearchRequest" />
+  </wsdl:message>
+  <wsdl:message name="AdvancedCaseSearchSoapOut">
+    <wsdl:part xmlns:q28="http://www.traen.com/2010/06/01" name="AdvancedCaseSearchResult" element="q28:AdvancedCaseSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseByCaseNumberSoapIn">
+    <wsdl:part xmlns:q29="http://www.traen.com/2010/06/01" name="parameters" element="q29:GetCaseByCaseNumber" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseByCaseNumberSoapOut">
+    <wsdl:part xmlns:q30="http://www.traen.com/2010/06/01" name="parameters" element="q30:GetCaseByCaseNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseTypeListSoapIn">
+    <wsdl:part xmlns:q31="http://www.traen.com/2008/01/20" name="GetCaseTypeListEmptyRequest" element="q31:GetCaseTypeListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseTypeListSoapOut">
+    <wsdl:part xmlns:q32="http://www.traen.com/2008/01/20" name="GetCaseTypeListResult" element="q32:CaseTypeListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseStatusListSoapIn">
+    <wsdl:part xmlns:q33="http://www.traen.com/2008/01/20" name="GetCaseStatusListEmptyRequest" element="q33:GetCaseStatusListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseStatusListSoapOut">
+    <wsdl:part xmlns:q34="http://www.traen.com/2008/01/20" name="GetCaseStatusListResult" element="q34:CaseStatusListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeListSoapIn">
+    <wsdl:part xmlns:q35="http://www.traen.com/2008/01/20" name="GetDocumentTypeListEmptyRequest" element="q35:GetDocumentTypeListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeListSoapOut">
+    <wsdl:part xmlns:q36="http://www.traen.com/2008/01/20" name="GetDocumentTypeListResult" element="q36:DocumentTypeListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMainDocumentTypeListSoapIn">
+    <wsdl:part xmlns:q37="http://www.traen.com/2008/01/20" name="GetMainDocumentTypeListEmptyRequest" element="q37:GetMainDocumentTypeListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetMainDocumentTypeListSoapOut">
+    <wsdl:part xmlns:q38="http://www.traen.com/2008/01/20" name="GetMainDocumentTypeListResult" element="q38:MainDocumentTypeListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentStatusListSoapIn">
+    <wsdl:part xmlns:q39="http://www.traen.com/2008/01/20" name="GetDocumentStatusListEmptyRequest" element="q39:GetDocumentStatusListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentStatusListSoapOut">
+    <wsdl:part xmlns:q40="http://www.traen.com/2008/01/20" name="GetDocumentStatusListResult" element="q40:DocumentStatusListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMainDocumentStatusListSoapIn">
+    <wsdl:part xmlns:q41="http://www.traen.com/2008/01/20" name="GetMainDocumentStatusListEmptyRequest" element="q41:GetMainDocumentStatusListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetMainDocumentStatusListSoapOut">
+    <wsdl:part xmlns:q42="http://www.traen.com/2008/01/20" name="GetMainDocumentStatusListResult" element="q42:MainDocumentStatusListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentCategoryListSoapIn">
+    <wsdl:part xmlns:q43="http://www.traen.com/2008/01/20" name="GetDocumentCategoryListEmptyRequest" element="q43:GetDocumentCategoryListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentCategoryListSoapOut">
+    <wsdl:part xmlns:q44="http://www.traen.com/2008/01/20" name="GetDocumentCategoryListResult" element="q44:DocumentCategoryListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccessCodeListSoapIn">
+    <wsdl:part xmlns:q45="http://www.traen.com/2008/01/20" name="AccessCodeRequest" element="q45:AccessCodeRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAccessCodeListSoapOut">
+    <wsdl:part xmlns:q46="http://www.traen.com/2008/01/20" name="GetAccessCodeListResult" element="q46:AccessCodeListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccessLevelListSoapIn">
+    <wsdl:part xmlns:q47="http://www.traen.com/2008/01/20" name="GetAccessLevelListEmptyRequest" element="q47:GetAccessLevelListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAccessLevelListSoapOut">
+    <wsdl:part xmlns:q48="http://www.traen.com/2008/01/20" name="GetAccessLevelListResult" element="q48:AccessLevelListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAccessGroupListSoapIn">
+    <wsdl:part xmlns:q49="http://www.traen.com/2008/01/20" name="AccessGroupRequest" element="q49:AccessGroupRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAccessGroupListSoapOut">
+    <wsdl:part xmlns:q50="http://www.traen.com/2008/01/20" name="GetAccessGroupListResult" element="q50:AccessGroupListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAdminUnitListSoapIn">
+    <wsdl:part xmlns:q51="http://www.traen.com/2008/01/20" name="GetAdminUnitListEmptyRequest" element="q51:GetAdminUnitListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetAdminUnitListSoapOut">
+    <wsdl:part xmlns:q52="http://www.traen.com/2008/01/20" name="GetAdminUnitListResult" element="q52:AdminUnitListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserListSoapIn">
+    <wsdl:part xmlns:q53="http://www.traen.com/2008/01/20" name="GetUserListEmptyRequest" element="q53:GetUserListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetUserListSoapOut">
+    <wsdl:part xmlns:q54="http://www.traen.com/2008/01/20" name="GetUserListResult" element="q54:UserListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserPrimaryAdminUnitSoapIn">
+    <wsdl:part xmlns:q55="http://www.traen.com/2008/01/20" name="PrimaryAdminUnitRequest" element="q55:PrimaryAdminUnitRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetUserPrimaryAdminUnitSoapOut">
+    <wsdl:part xmlns:q56="http://www.traen.com/2008/01/20" name="GetUserPrimaryAdminUnitResult" element="q56:PrimaryAdminUnitResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCategoryListSoapIn">
+    <wsdl:part xmlns:q57="http://www.traen.com/2008/01/20" name="GetCategoryListEmptyRequest" element="q57:GetCategoryListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetCategoryListSoapOut">
+    <wsdl:part xmlns:q58="http://www.traen.com/2008/01/20" name="GetCategoryListResult" element="q58:CategoryListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDiscardRuleListSoapIn">
+    <wsdl:part xmlns:q59="http://www.traen.com/2008/01/20" name="GetDiscardRuleListEmptyRequest" element="q59:GetDiscardRuleListEmptyRequest" />
+  </wsdl:message>
+  <wsdl:message name="GetDiscardRuleListSoapOut">
+    <wsdl:part xmlns:q60="http://www.traen.com/2008/01/20" name="GetDiscardRuleListResult" element="q60:DiscardRuleListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetErrorTypeSoapIn">
+    <wsdl:part xmlns:q61="http://www.traen.com/2008/01/20" name="ErrorCode" element="q61:ErrorCode" />
+  </wsdl:message>
+  <wsdl:message name="GetErrorTypeSoapOut">
+    <wsdl:part xmlns:q62="http://www.traen.com/2008/01/20" name="GetErrorTypeResult" element="q62:ErrorType" />
+  </wsdl:message>
+  <wsdl:message name="GetPartyRelationListSoapIn">
+    <wsdl:part xmlns:q63="http://www.traen.com/2008/01/20" name="CaseTypeLiteral" element="q63:CaseTypeLiteral" />
+  </wsdl:message>
+  <wsdl:message name="GetPartyRelationListSoapOut">
+    <wsdl:part xmlns:q64="http://www.traen.com/2008/01/20" name="GetPartyRelationListResult" element="q64:PartyRelationList" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseSubTypesSoapIn">
+    <wsdl:part xmlns:q65="http://www.traen.com/2010/06/01" name="parameters" element="q65:GetCaseSubTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseSubTypesSoapOut">
+    <wsdl:part xmlns:q66="http://www.traen.com/2010/06/01" name="parameters" element="q66:GetCaseSubTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseArrangementTypesSoapIn">
+    <wsdl:part xmlns:q67="http://www.traen.com/2010/06/01" name="parameters" element="q67:GetCaseArrangementTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseArrangementTypesSoapOut">
+    <wsdl:part xmlns:q68="http://www.traen.com/2010/06/01" name="parameters" element="q68:GetCaseArrangementTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseEducationClassesSoapIn">
+    <wsdl:part xmlns:q69="http://www.traen.com/2010/06/01" name="parameters" element="q69:GetCaseEducationClasses" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseEducationClassesSoapOut">
+    <wsdl:part xmlns:q70="http://www.traen.com/2010/06/01" name="parameters" element="q70:GetCaseEducationClassesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseGrantLevelsSoapIn">
+    <wsdl:part xmlns:q71="http://www.traen.com/2010/06/01" name="parameters" element="q71:GetCaseGrantLevels" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseGrantLevelsSoapOut">
+    <wsdl:part xmlns:q72="http://www.traen.com/2010/06/01" name="parameters" element="q72:GetCaseGrantLevelsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseGuardianParentTypesSoapIn">
+    <wsdl:part xmlns:q73="http://www.traen.com/2010/06/01" name="parameters" element="q73:GetCaseGuardianParentTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseGuardianParentTypesSoapOut">
+    <wsdl:part xmlns:q74="http://www.traen.com/2010/06/01" name="parameters" element="q74:GetCaseGuardianParentTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseServiceTypesSoapIn">
+    <wsdl:part xmlns:q75="http://www.traen.com/2010/06/01" name="parameters" element="q75:GetCaseServiceTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseServiceTypesSoapOut">
+    <wsdl:part xmlns:q76="http://www.traen.com/2010/06/01" name="parameters" element="q76:GetCaseServiceTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseSpecialistTypesSoapIn">
+    <wsdl:part xmlns:q77="http://www.traen.com/2010/06/01" name="parameters" element="q77:GetCaseSpecialistTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseSpecialistTypesSoapOut">
+    <wsdl:part xmlns:q78="http://www.traen.com/2010/06/01" name="parameters" element="q78:GetCaseSpecialistTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseRecommendationTypesSoapIn">
+    <wsdl:part xmlns:q79="http://www.traen.com/2010/06/01" name="parameters" element="q79:GetCaseRecommendationTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseRecommendationTypesSoapOut">
+    <wsdl:part xmlns:q80="http://www.traen.com/2010/06/01" name="parameters" element="q80:GetCaseRecommendationTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseEvaluationTypesSoapIn">
+    <wsdl:part xmlns:q81="http://www.traen.com/2010/06/01" name="parameters" element="q81:GetCaseEvaluationTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseEvaluationTypesSoapOut">
+    <wsdl:part xmlns:q82="http://www.traen.com/2010/06/01" name="parameters" element="q82:GetCaseEvaluationTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseEducationCategoriesSoapIn">
+    <wsdl:part xmlns:q83="http://www.traen.com/2010/06/01" name="parameters" element="q83:GetCaseEducationCategories" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseEducationCategoriesSoapOut">
+    <wsdl:part xmlns:q84="http://www.traen.com/2010/06/01" name="parameters" element="q84:GetCaseEducationCategoriesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseSubRecommendationTypesSoapIn">
+    <wsdl:part xmlns:q85="http://www.traen.com/2010/06/01" name="parameters" element="q85:GetCaseSubRecommendationTypes" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseSubRecommendationTypesSoapOut">
+    <wsdl:part xmlns:q86="http://www.traen.com/2010/06/01" name="parameters" element="q86:GetCaseSubRecommendationTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFieldsConfigurationSoapIn">
+    <wsdl:part xmlns:q87="http://www.traen.com/2010/06/01" name="parameters" element="q87:GetCustomFieldsConfiguration" />
+  </wsdl:message>
+  <wsdl:message name="GetCustomFieldsConfigurationSoapOut">
+    <wsdl:part xmlns:q88="http://www.traen.com/2010/06/01" name="parameters" element="q88:GetCustomFieldsConfigurationResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseCustomFieldsConfigurationSoapIn">
+    <wsdl:part xmlns:q89="http://www.traen.com/2010/06/01" name="parameters" element="q89:GetCaseCustomFieldsConfiguration" />
+  </wsdl:message>
+  <wsdl:message name="GetCaseCustomFieldsConfigurationSoapOut">
+    <wsdl:part xmlns:q90="http://www.traen.com/2010/06/01" name="parameters" element="q90:GetCaseCustomFieldsConfigurationResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentCustomFieldsConfigurationSoapIn">
+    <wsdl:part xmlns:q91="http://www.traen.com/2010/06/01" name="parameters" element="q91:GetDocumentCustomFieldsConfiguration" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentCustomFieldsConfigurationSoapOut">
+    <wsdl:part xmlns:q92="http://www.traen.com/2010/06/01" name="parameters" element="q92:GetDocumentCustomFieldsConfigurationResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentDocumentStorageFormsSoapIn">
+    <wsdl:part xmlns:q93="http://www.traen.com/2010/06/01" name="parameters" element="q93:GetDocumentDocumentStorageForms" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentDocumentStorageFormsSoapOut">
+    <wsdl:part xmlns:q94="http://www.traen.com/2010/06/01" name="parameters" element="q94:GetDocumentDocumentStorageFormsResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateMainDocumentSoapIn">
+    <wsdl:part xmlns:q95="http://www.traen.com/2010/06/01" name="CreateMainDocumentRequest" element="q95:CreateMainDocumentRequest" />
+  </wsdl:message>
+  <wsdl:message name="CreateMainDocumentSoapOut">
+    <wsdl:part xmlns:q96="http://www.traen.com/2010/06/01" name="CreateMainDocumentResult" element="q96:DocumentIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="GetMainDocumentSoapIn">
+    <wsdl:part xmlns:q97="http://www.traen.com/2010/06/01" name="DocumentIdentifier" element="q97:DocumentIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="GetMainDocumentSoapOut">
+    <wsdl:part xmlns:q98="http://www.traen.com/2010/06/01" name="GetMainDocumentResult" element="q98:DocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMainDocumentSoapIn">
+    <wsdl:part xmlns:q99="http://www.traen.com/2010/06/01" name="UpdateMainDocumentRequest" element="q99:UpdateMainDocumentRequest" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMainDocumentSoapOut">
+    <wsdl:part xmlns:q100="http://www.traen.com/2010/06/01" name="UpdateMainDocumentResult" element="q100:DocumentIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMainDocumentExSoapIn">
+    <wsdl:part xmlns:q101="http://www.traen.com/2010/06/01" name="UpdateMainDocumentExRequest" element="q101:UpdateMainDocumentExRequest" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMainDocumentExSoapOut">
+    <wsdl:part xmlns:q102="http://www.traen.com/2010/06/01" name="UpdateMainDocumentExResult" element="q102:DocumentIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="GetAllDocumentsSoapIn">
+    <wsdl:part xmlns:q103="http://www.traen.com/2007/09/06/schema" name="CaseFileIdentifier" element="q103:CaseFileIdentifier" />
+  </wsdl:message>
+  <wsdl:message name="GetAllDocumentsSoapOut">
+    <wsdl:part xmlns:q104="http://www.traen.com/2010/06/01" name="GetAllDocumentsResult" element="q104:ArrayOfDocuments" />
+  </wsdl:message>
+  <wsdl:message name="MainDocumentSearchSoapIn">
+    <wsdl:part xmlns:q105="http://www.traen.com/2010/06/01" name="MainDocumentSearchRequest" element="q105:MainDocumentSearchRequest" />
+  </wsdl:message>
+  <wsdl:message name="MainDocumentSearchSoapOut">
+    <wsdl:part xmlns:q106="http://www.traen.com/2010/06/01" name="MainDocumentSearchResult" element="q106:ArrayOfDocuments" />
+  </wsdl:message>
+  <wsdl:portType name="AdvancedMultiCaseService7">
+    <wsdl:operation name="GetCurrentMultiCaseType">
+      <wsdl:input message="tns:GetCurrentMultiCaseTypeSoapIn" />
+      <wsdl:output message="tns:GetCurrentMultiCaseTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateAdvancedMultiCase">
+      <wsdl:input message="tns:CreateAdvancedMultiCaseSoapIn" />
+      <wsdl:output message="tns:CreateAdvancedMultiCaseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAdvancedMultiCase">
+      <wsdl:input message="tns:GetAdvancedMultiCaseSoapIn" />
+      <wsdl:output message="tns:GetAdvancedMultiCaseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAdvancedMultiCase">
+      <wsdl:input message="tns:UpdateAdvancedMultiCaseSoapIn" />
+      <wsdl:output message="tns:UpdateAdvancedMultiCaseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AppendContactToAdvancedMultiCase">
+      <wsdl:input message="tns:AppendContactToAdvancedMultiCaseSoapIn" />
+      <wsdl:output message="tns:AppendContactToAdvancedMultiCaseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAdvancedMultiCaseContacts">
+      <wsdl:input message="tns:GetAdvancedMultiCaseContactsSoapIn" />
+      <wsdl:output message="tns:GetAdvancedMultiCaseContactsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveContactFromAdvancedMultiCase">
+      <wsdl:input message="tns:RemoveContactFromAdvancedMultiCaseSoapIn" />
+      <wsdl:output message="tns:RemoveContactFromAdvancedMultiCaseSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="CaseService7">
+    <wsdl:operation name="CreateCase">
+      <wsdl:input message="tns:CreateCaseSoapIn" />
+      <wsdl:output message="tns:CreateCaseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCase">
+      <wsdl:input message="tns:GetCaseSoapIn" />
+      <wsdl:output message="tns:GetCaseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCase">
+      <wsdl:input message="tns:UpdateCaseSoapIn" />
+      <wsdl:output message="tns:UpdateCaseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchCases">
+      <wsdl:input message="tns:SearchCasesSoapIn" />
+      <wsdl:output message="tns:SearchCasesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIdentityNumbersFromCases">
+      <wsdl:input message="tns:GetIdentityNumbersFromCasesSoapIn" />
+      <wsdl:output message="tns:GetIdentityNumbersFromCasesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCasesForIdentity">
+      <wsdl:input message="tns:GetCasesForIdentitySoapIn" />
+      <wsdl:output message="tns:GetCasesForIdentitySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AdvancedCaseSearch">
+      <wsdl:input message="tns:AdvancedCaseSearchSoapIn" />
+      <wsdl:output message="tns:AdvancedCaseSearchSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseByCaseNumber">
+      <wsdl:input message="tns:GetCaseByCaseNumberSoapIn" />
+      <wsdl:output message="tns:GetCaseByCaseNumberSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ConfigurationService7">
+    <wsdl:operation name="GetCaseTypeList">
+      <wsdl:input message="tns:GetCaseTypeListSoapIn" />
+      <wsdl:output message="tns:GetCaseTypeListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseStatusList">
+      <wsdl:input message="tns:GetCaseStatusListSoapIn" />
+      <wsdl:output message="tns:GetCaseStatusListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeList">
+      <wsdl:input message="tns:GetDocumentTypeListSoapIn" />
+      <wsdl:output message="tns:GetDocumentTypeListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocumentTypeList">
+      <wsdl:input message="tns:GetMainDocumentTypeListSoapIn" />
+      <wsdl:output message="tns:GetMainDocumentTypeListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentStatusList">
+      <wsdl:input message="tns:GetDocumentStatusListSoapIn" />
+      <wsdl:output message="tns:GetDocumentStatusListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocumentStatusList">
+      <wsdl:input message="tns:GetMainDocumentStatusListSoapIn" />
+      <wsdl:output message="tns:GetMainDocumentStatusListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentCategoryList">
+      <wsdl:input message="tns:GetDocumentCategoryListSoapIn" />
+      <wsdl:output message="tns:GetDocumentCategoryListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessCodeList">
+      <wsdl:input message="tns:GetAccessCodeListSoapIn" />
+      <wsdl:output message="tns:GetAccessCodeListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessLevelList">
+      <wsdl:input message="tns:GetAccessLevelListSoapIn" />
+      <wsdl:output message="tns:GetAccessLevelListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessGroupList">
+      <wsdl:input message="tns:GetAccessGroupListSoapIn" />
+      <wsdl:output message="tns:GetAccessGroupListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAdminUnitList">
+      <wsdl:input message="tns:GetAdminUnitListSoapIn" />
+      <wsdl:output message="tns:GetAdminUnitListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserList">
+      <wsdl:input message="tns:GetUserListSoapIn" />
+      <wsdl:output message="tns:GetUserListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserPrimaryAdminUnit">
+      <wsdl:input message="tns:GetUserPrimaryAdminUnitSoapIn" />
+      <wsdl:output message="tns:GetUserPrimaryAdminUnitSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCategoryList">
+      <wsdl:input message="tns:GetCategoryListSoapIn" />
+      <wsdl:output message="tns:GetCategoryListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDiscardRuleList">
+      <wsdl:input message="tns:GetDiscardRuleListSoapIn" />
+      <wsdl:output message="tns:GetDiscardRuleListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetErrorType">
+      <wsdl:input message="tns:GetErrorTypeSoapIn" />
+      <wsdl:output message="tns:GetErrorTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPartyRelationList">
+      <wsdl:input message="tns:GetPartyRelationListSoapIn" />
+      <wsdl:output message="tns:GetPartyRelationListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSubTypes">
+      <wsdl:input message="tns:GetCaseSubTypesSoapIn" />
+      <wsdl:output message="tns:GetCaseSubTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseArrangementTypes">
+      <wsdl:input message="tns:GetCaseArrangementTypesSoapIn" />
+      <wsdl:output message="tns:GetCaseArrangementTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEducationClasses">
+      <wsdl:input message="tns:GetCaseEducationClassesSoapIn" />
+      <wsdl:output message="tns:GetCaseEducationClassesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseGrantLevels">
+      <wsdl:input message="tns:GetCaseGrantLevelsSoapIn" />
+      <wsdl:output message="tns:GetCaseGrantLevelsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseGuardianParentTypes">
+      <wsdl:input message="tns:GetCaseGuardianParentTypesSoapIn" />
+      <wsdl:output message="tns:GetCaseGuardianParentTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseServiceTypes">
+      <wsdl:input message="tns:GetCaseServiceTypesSoapIn" />
+      <wsdl:output message="tns:GetCaseServiceTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSpecialistTypes">
+      <wsdl:input message="tns:GetCaseSpecialistTypesSoapIn" />
+      <wsdl:output message="tns:GetCaseSpecialistTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseRecommendationTypes">
+      <wsdl:input message="tns:GetCaseRecommendationTypesSoapIn" />
+      <wsdl:output message="tns:GetCaseRecommendationTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEvaluationTypes">
+      <wsdl:input message="tns:GetCaseEvaluationTypesSoapIn" />
+      <wsdl:output message="tns:GetCaseEvaluationTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEducationCategories">
+      <wsdl:input message="tns:GetCaseEducationCategoriesSoapIn" />
+      <wsdl:output message="tns:GetCaseEducationCategoriesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSubRecommendationTypes">
+      <wsdl:input message="tns:GetCaseSubRecommendationTypesSoapIn" />
+      <wsdl:output message="tns:GetCaseSubRecommendationTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFieldsConfiguration">
+      <wsdl:input message="tns:GetCustomFieldsConfigurationSoapIn" />
+      <wsdl:output message="tns:GetCustomFieldsConfigurationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseCustomFieldsConfiguration">
+      <wsdl:input message="tns:GetCaseCustomFieldsConfigurationSoapIn" />
+      <wsdl:output message="tns:GetCaseCustomFieldsConfigurationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentCustomFieldsConfiguration">
+      <wsdl:input message="tns:GetDocumentCustomFieldsConfigurationSoapIn" />
+      <wsdl:output message="tns:GetDocumentCustomFieldsConfigurationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentDocumentStorageForms">
+      <wsdl:input message="tns:GetDocumentDocumentStorageFormsSoapIn" />
+      <wsdl:output message="tns:GetDocumentDocumentStorageFormsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="MainDocumentService7">
+    <wsdl:operation name="CreateMainDocument">
+      <wsdl:input message="tns:CreateMainDocumentSoapIn" />
+      <wsdl:output message="tns:CreateMainDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocument">
+      <wsdl:input message="tns:GetMainDocumentSoapIn" />
+      <wsdl:output message="tns:GetMainDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMainDocument">
+      <wsdl:input message="tns:UpdateMainDocumentSoapIn" />
+      <wsdl:output message="tns:UpdateMainDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMainDocumentEx">
+      <wsdl:input message="tns:UpdateMainDocumentExSoapIn" />
+      <wsdl:output message="tns:UpdateMainDocumentExSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDocuments">
+      <wsdl:input message="tns:GetAllDocumentsSoapIn" />
+      <wsdl:output message="tns:GetAllDocumentsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MainDocumentSearch">
+      <wsdl:input message="tns:MainDocumentSearchSoapIn" />
+      <wsdl:output message="tns:MainDocumentSearchSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AdvancedMultiCaseService7" type="tns:AdvancedMultiCaseService7">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCurrentMultiCaseType">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCurrentMultiCaseType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateAdvancedMultiCase">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/CreateAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdvancedMultiCase">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAdvancedMultiCase">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/UpdateAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AppendContactToAdvancedMultiCase">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/AppendContactToAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdvancedMultiCaseContacts">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAdvancedMultiCaseContacts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveContactFromAdvancedMultiCase">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/RemoveContactFromAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CaseService7" type="tns:CaseService7">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateCase">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/CreateCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCase">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCase">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/UpdateCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchCases">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/SearchCases" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIdentityNumbersFromCases">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetIdentityNumbersFromCases" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCasesForIdentity">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCasesForIdentity" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AdvancedCaseSearch">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/AdvancedCaseSearch" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseByCaseNumber">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseByCaseNumber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ConfigurationService7" type="tns:ConfigurationService7">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCaseTypeList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseTypeList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseStatusList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseStatusList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentTypeList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocumentTypeList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetMainDocumentTypeList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentStatusList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentStatusList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocumentStatusList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetMainDocumentStatusList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentCategoryList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentCategoryList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessCodeList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAccessCodeList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessLevelList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAccessLevelList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessGroupList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAccessGroupList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdminUnitList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAdminUnitList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetUserList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserPrimaryAdminUnit">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetUserPrimaryAdminUnit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCategoryList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCategoryList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDiscardRuleList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDiscardRuleList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetErrorType">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetErrorType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPartyRelationList">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetPartyRelationList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSubTypes">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseSubTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseArrangementTypes">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseArrangementTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEducationClasses">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseEducationClasses" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseGrantLevels">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseGrantLevels" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseGuardianParentTypes">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseGuardianParentTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseServiceTypes">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseServiceTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSpecialistTypes">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseSpecialistTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseRecommendationTypes">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseRecommendationTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEvaluationTypes">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseEvaluationTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEducationCategories">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseEducationCategories" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSubRecommendationTypes">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseSubRecommendationTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFieldsConfiguration">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCustomFieldsConfiguration" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseCustomFieldsConfiguration">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseCustomFieldsConfiguration" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentCustomFieldsConfiguration">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentCustomFieldsConfiguration" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentDocumentStorageForms">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentDocumentStorageForms" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="MainDocumentService7" type="tns:MainDocumentService7">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateMainDocument">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/CreateMainDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocument">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetMainDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMainDocument">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/UpdateMainDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMainDocumentEx">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/UpdateMainDocumentEx" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDocuments">
+      <soap:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAllDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainDocumentSearch">
+      <soap:operation soapAction="http://www.traen.com/2008/01/30/schema/MainDocumentSearch" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="AdvancedMultiCaseService71" type="tns:AdvancedMultiCaseService7">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCurrentMultiCaseType">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCurrentMultiCaseType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateAdvancedMultiCase">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/CreateAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdvancedMultiCase">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAdvancedMultiCase">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/UpdateAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AppendContactToAdvancedMultiCase">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/AppendContactToAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdvancedMultiCaseContacts">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAdvancedMultiCaseContacts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveContactFromAdvancedMultiCase">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/RemoveContactFromAdvancedMultiCase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CaseService71" type="tns:CaseService7">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateCase">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/CreateCase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCase">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCase">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/UpdateCase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchCases">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/SearchCases" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIdentityNumbersFromCases">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetIdentityNumbersFromCases" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCasesForIdentity">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCasesForIdentity" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AdvancedCaseSearch">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/AdvancedCaseSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseByCaseNumber">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseByCaseNumber" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ConfigurationService71" type="tns:ConfigurationService7">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCaseTypeList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseTypeList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseStatusList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseStatusList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentTypeList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocumentTypeList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetMainDocumentTypeList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentStatusList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentStatusList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocumentStatusList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetMainDocumentStatusList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentCategoryList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentCategoryList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessCodeList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAccessCodeList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessLevelList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAccessLevelList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccessGroupList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAccessGroupList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAdminUnitList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAdminUnitList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetUserList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserPrimaryAdminUnit">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetUserPrimaryAdminUnit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCategoryList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCategoryList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDiscardRuleList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDiscardRuleList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetErrorType">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetErrorType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPartyRelationList">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetPartyRelationList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSubTypes">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseSubTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseArrangementTypes">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseArrangementTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEducationClasses">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseEducationClasses" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseGrantLevels">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseGrantLevels" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseGuardianParentTypes">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseGuardianParentTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseServiceTypes">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseServiceTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSpecialistTypes">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseSpecialistTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseRecommendationTypes">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseRecommendationTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEvaluationTypes">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseEvaluationTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseEducationCategories">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseEducationCategories" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseSubRecommendationTypes">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseSubRecommendationTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCustomFieldsConfiguration">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCustomFieldsConfiguration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCaseCustomFieldsConfiguration">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetCaseCustomFieldsConfiguration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentCustomFieldsConfiguration">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentCustomFieldsConfiguration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentDocumentStorageForms">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetDocumentDocumentStorageForms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="MainDocumentService71" type="tns:MainDocumentService7">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateMainDocument">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/CreateMainDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMainDocument">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetMainDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMainDocument">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/UpdateMainDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMainDocumentEx">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/UpdateMainDocumentEx" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDocuments">
+      <soap12:operation soapAction="http://www.traen.com/2010/06/01/schema/GetAllDocuments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainDocumentSearch">
+      <soap12:operation soapAction="http://www.traen.com/2008/01/30/schema/MainDocumentSearch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

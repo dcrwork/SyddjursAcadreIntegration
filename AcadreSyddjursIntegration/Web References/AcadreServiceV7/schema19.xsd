@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://www.traen.com/2007/11/02/schema" elementFormDefault="qualified" targetNamespace="http://www.traen.com/2007/11/02/schema" id="schema19" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://www.traen.com/2007/11/01" />
+  <xs:import namespace="http://www.traen.com/2007/04/01" />
+  <xs:element name="UpdateContactRequest" type="tns:UpdateContactRequestType2" />
+  <xs:complexType name="UpdateContactRequestType2">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://www.traen.com/2007/11/01" minOccurs="0" maxOccurs="1" ref="q1:ContactObject" />
+      <xs:element xmlns:q2="http://www.traen.com/2007/04/01" minOccurs="0" maxOccurs="1" ref="q2:GUID" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element xmlns:q3="http://www.traen.com/2007/04/01" name="ArrayOfContacts" type="q3:ArrayOfContactSearchResponseType" />
+  <xs:element name="PersonId" type="xs:string" />
+  <xs:element name="OrganizationId" type="xs:string" />
+  <xs:element name="PropertyId" type="xs:string" />
+  <xs:element name="GroupId" type="xs:string" />
+</xs:schema>
