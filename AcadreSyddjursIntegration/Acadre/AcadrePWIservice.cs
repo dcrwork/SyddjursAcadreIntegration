@@ -32,7 +32,7 @@ namespace AcadrePWI.Acadre
 
         public void GetCookie()
         {
-            if (cachedCookie != null/* && !(cachedCookie.Expired || DateTime.Now < cachedCookie.TimeStamp.AddHours(4))*/)
+            if (cachedCookie != null && !(cachedCookie.Expired || DateTime.Now > cachedCookie.TimeStamp.AddHours(4)))
             {
                 return;
             }

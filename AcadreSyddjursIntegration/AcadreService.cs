@@ -136,10 +136,10 @@ namespace AcadreLib
                 }
                 else if (foundContactsGUI.Length == 100)
                 {
-                    foundContactsGUI = PWIservice.SearchContacts(searchCriterion.PrimaryContactsName).Where(x=>x.ContactType == 3).Select(x=>x.Id).ToArray();
-                    // Hvis der er for mange søgeresultater, så opgives det at finde sager. Måske skal brugeren ændre sine søgekriterier?
-                    if (foundContactsGUI.Length == 500)
+                    var foundContacts = PWIservice.SearchContacts(searchCriterion.PrimaryContactsName);
+                    if (foundContacts.Count() == 500)
                         return childCases;
+                    foundContactsGUI = foundContacts.Where(x=>x.ContactType == 3).Select(x=>x.Id).ToArray();
                 }
             }
 
