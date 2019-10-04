@@ -1,13 +1,15 @@
 ﻿using System;
+using RestSharp;
 using System.Collections.Generic;
 using System.Windows.Documents;
+using System.Net.Http;
 using System.Windows;
 using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using AcadrePWS;
+
 
 namespace AcadreLib
 {
@@ -23,79 +25,90 @@ namespace AcadreLib
         private AcadreServiceV4.MemoService4 memoService4;
         private AcadreServiceV4.CaseService4 caseService4;
         private CPRBrokerService CPRBrokerService;
+        private AcadrePWI.Acadre.AcadrePWIservice PWIservice;
         string CaseFileTypeCode = "BUSAG";
-        public AcadreService(string currentUser)
+        public AcadreService(string Acadre_baseurlPWI,string Acadre_urlPWS, string Acadre_username, string Acadre_password, string Acadre_domain, string Acadre_actingForUsername, string CPRBroker_EndpointURL, string CPRBroker_UserToken, string CPRBroker_ApplicationToken)
         {
-            Acadre.PWSHeaderExtension.User = currentUser;
-            System.Net.NetworkCredential networkCredential = new System.Net.NetworkCredential(Config.AcadreServiceUserName, Config.AcadreServiceUserPassword, Config.AcadreServiceUserDomain);
+            Acadre.PWSHeaderExtension.User = Acadre_actingForUsername;
+            System.Net.NetworkCredential networkCredential = new System.Net.NetworkCredential(Acadre_username, Acadre_password, Acadre_domain);
             caseService = new AcadreServiceV7.CaseService7
             {
                 Credentials = networkCredential,
-                Url = Config.AcadreService
+                Url = Acadre_urlPWS
             };
             contactService = new AcadreServiceV7.ContactService7
             {
                 Credentials = networkCredential,
-                Url = Config.AcadreService
+                Url = Acadre_urlPWS
             };
             configurationService = new AcadreServiceV7.ConfigurationService7
             {
                 Credentials = networkCredential,
-                Url = Config.AcadreService
+                Url = Acadre_urlPWS
             };
             documentService = new AcadreServiceV7.MainDocumentService7
             {
                 Credentials = networkCredential,
-                Url = Config.AcadreService
+                Url = Acadre_urlPWS
             };
             memoService = new AcadreServiceV7.MemoService7
             {
                 Credentials = networkCredential,
-                Url = Config.AcadreService
+                Url = Acadre_urlPWS
             };
             documentService4 = new AcadreServiceV4.DocumentService4
             {
                 Credentials = networkCredential,
-                Url = Config.AcadreService.Replace("7.asmx", "4.asmx")
+                Url = Acadre_urlPWS.Replace("7.asmx", "4.asmx")
             };
             memoService4 = new AcadreServiceV4.MemoService4
             {
                 Credentials = networkCredential,
-                Url = Config.AcadreService.Replace("7.asmx", "4.asmx")
+                Url = Acadre_urlPWS.Replace("7.asmx", "4.asmx")
             };
-            CPRBrokerService = new CPRBrokerService(Config.CPRBrokerEndpointURL, Config.CPRBrokerUserToken, Config.CPRBrokerApplicationToken);
+            caseService4 = new AcadreServiceV4.CaseService4
+            {
+                Credentials = networkCredential,
+                Url = Acadre_urlPWS.Replace("7.asmx", "4.asmx")
+            };
+            CPRBrokerService = new CPRBrokerService(CPRBroker_EndpointURL, CPRBroker_UserToken, CPRBroker_ApplicationToken);
+            PWIservice = new AcadrePWI.Acadre.AcadrePWIservice(Acadre_baseurlPWI, Acadre_username,Acadre_password);
         }
 
         public IEnumerable<ChildCase> SearchChildren(SearchCriterion searchCriterion)
         {
+            // Acadre PWS metoden er begrænset af at der kun kan fremsøges 100 sager af gangen. Derfor suppleres der i disse tilfælde med Acadre PWI
+            // Følgende parametre kan ikke søges efter gennem API:
+            // 1. KLE
+            // 2. PrimaryContactsName (men der kan godt søges efter specifik Primær kontakt ID)
+
             List<ChildCase> childCases = new List<ChildCase>();
-            var userList = configurationService.GetUserList(new AcadreServiceV7.EmptyRequestType()).ToList(); // Herfra kan CaseManager aflæses
-            AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCaseCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
+            var userList = configurationService.GetUserList(new AcadreServiceV7.EmptyRequestType()).ToList(); // Herfra kan CaseManager aflæses. Listen indeholder alle brugere i Acadre som ikke er ophørte.
+            
             AcadreServiceV7.AdvancedCaseSearchRequestType3 advancedCaseSearchRequestType = new AcadreServiceV7.AdvancedCaseSearchRequestType3();
+
+            // For at sænke risikoen for at ramme de max 100 sager, så splittes søgningen op i åbne og lukkede sager
             string[] StatusCodes;
-            if (!searchCriterion.IsClosed.HasValue)
-            {
-                StatusCodes = new string[] { "A", "B", "P", "S" };
-            }
-            else
+            if (searchCriterion.IsClosed.HasValue)
             {
                 if (searchCriterion.IsClosed.Value)
                     StatusCodes = new string[] { "A" };
                 else
                     StatusCodes = new string[] { "B" };
             }
+            else
+            {
+                StatusCodes = new string[] { "A", "B" }; //StatusCodes = new string[] { "A", "B", "P", "S" };
+            }
             // Sagstype er det samme for alle børnesager
             advancedCaseSearchRequestType.TypeCode = CaseFileTypeCode;
-            //searchCaseCriterion.CaseFileTypeCode = CaseFileTypeCode;
+
             // Afdeling er obligatorisk søgekriterie
             if (searchCriterion.AcadreOrgID != 0)
             {
                 advancedCaseSearchRequestType.AdministrativeUnitId = searchCriterion.AcadreOrgID.ToString();
-                //searchCaseCriterion.AdministrativeUnit = new AcadreServiceV7.AdministrativeUnitType()
-                //{
-                //    AdministrativeUnitReference = searchCriterion.AcadreOrgID.ToString()
-                //};
             }
+
             // Sagsansvarlig er valgfrit søgekriterie           
             if (searchCriterion.CaseManagerInitials != null)
             {
@@ -103,94 +116,107 @@ namespace AcadreLib
                 if (user != null)
                 {
                     advancedCaseSearchRequestType.ResponsibleUserId = user.Id;
-                    // searchCaseCriterion.CaseFileManagerReference = user.Id;
                 }
                 else
                     return childCases;
             }
-            // KLE er valgfrit søgekriterie  
-            //if (searchCriterion.KLE != null)
-            //{
-            //    searchCaseCriterion.ClassificationCriterion = new AcadreServiceV7.ClassificationCriterionType[]
-            //    {
-            //            new AcadreServiceV7.ClassificationCriterionType()
-            //            {
-            //                ClassificationLiteral = searchCriterion.KLE,
-            //                PrincipleLiteral = "KL Koder"
-            //            }
-            //    };
-            //}
 
-            // Der kan desværre ikke søges efter kontakter med navn fordi APWS ikke kan returnere mere end 100 personer.
-            AcadreServiceV7.ContactSearchResponseType[] foundContacts = new AcadreServiceV7.ContactSearchResponseType[] { null };
-            //if (searchCriterion.PrimaryContactsName != "" && searchCriterion.ChildCPR == "*")
-            //{
-            //    var searchContactCriterion = new AcadreServiceV7.SearchContactCriterionType2();
-            //    searchContactCriterion.ContactTypeName = "Person";
-            //    searchContactCriterion.SearchTerm = searchCriterion.PrimaryContactsName;
-            //    foundContacts = contactService.SearchContacts(searchContactCriterion);
-            //    if (foundContacts.Length == 0)
-            //    {
-            //        return childCases;
-            //    }
-            //}
+            // Der kan desværre ikke søges efter kontakter med navn fordi Acadre PWS ikke kan returnere mere end 100 personer.
+            string[] foundContactsGUI = new string[] { null };
+            if (searchCriterion.PrimaryContactsName != "" && searchCriterion.ChildCPR == "*")
+            {
+                var searchContactCriterion = new AcadreServiceV7.SearchContactCriterionType2();
+                //AcadreServiceV7.ContactType contactType = new AcadreServiceV7.ContactType();
+                searchContactCriterion.ContactTypeName = "Person";
+                searchContactCriterion.SearchTerm = searchCriterion.PrimaryContactsName;
+                foundContactsGUI = contactService.SearchContacts(searchContactCriterion).Select(x=>x.GUID).ToArray();
+                if (foundContactsGUI.Length == 0)
+                {
+                    return childCases;
+                }
+                else if (foundContactsGUI.Length == 100)
+                {
+                    foundContactsGUI = PWIservice.SearchContacts(searchCriterion.PrimaryContactsName).Where(x=>x.ContactType == 3).Select(x=>x.Id).ToArray();
+                    // Hvis der er for mange søgeresultater, så opgives det at finde sager. Måske skal brugeren ændre sine søgekriterier?
+                    if (foundContactsGUI.Length == 500)
+                        return childCases;
+                }
+            }
 
             // CPR er valgfrit søgekriterie
             advancedCaseSearchRequestType.Title = searchCriterion.ChildCPR;
-            //searchCaseCriterion.CaseFileTitleText = searchCriterion.ChildCPR;
-            advancedCaseSearchRequestType.CustomFields = new AcadreServiceV7.CustomField[] { new AcadreServiceV7.CustomField { Value = searchCriterion.CaseContent, Name = "df1" } };
-            //searchCaseCriterion.CustomFields = new AcadreServiceV7.CustomField[] { new AcadreServiceV7.CustomField { Value = searchCriterion.CaseContent, Name = "df1" }};
-            foreach (var Contact in foundContacts)
-            {
-                if (Contact != null)
-                    advancedCaseSearchRequestType.Title = ((AcadreServiceV7.PersonType3)contactService.GetContact(Contact.GUID)).PersonCivilRegistrationIdentifier;
 
+            var UnknownUser = new AcadreServiceV7.UserType() { Initials = "", Name = "", Id = "" };
+            var foundCases = new List<AcadreServiceV7.CaseFileType3>();
+            foreach (var PrimaryContactGUI in foundContactsGUI)
+            {
+                if (PrimaryContactGUI != null)
+                    advancedCaseSearchRequestType.CustomFields = new AcadreServiceV7.CustomField[] {
+                                                                                                new AcadreServiceV7.CustomField {Value = searchCriterion.CaseContent, Name = "df1"},
+                                                                                                new AcadreServiceV7.CustomField {Value = PrimaryContactGUI, Name = "df25"}
+                                                                                               };
+                else
+                    advancedCaseSearchRequestType.CustomFields = new AcadreServiceV7.CustomField[] {
+                                                                                                new AcadreServiceV7.CustomField {Value = searchCriterion.CaseContent, Name = "df1"}
+                                                                                               };
                 foreach (var StatusCode in StatusCodes)
                 {
                     advancedCaseSearchRequestType.StatusCode = StatusCode;
-                    var foundCases = caseService.AdvancedCaseSearch(advancedCaseSearchRequestType);
-
-                    //var foundCases = caseService.SearchCases(searchCaseCriterion);
-                    foreach (AcadreServiceV7.BUCaseFileType foundCase in foundCases)
+                    var result = caseService.AdvancedCaseSearch(advancedCaseSearchRequestType);
+                    if(result.Length == 100)
                     {
-                        if (!(searchCriterion.KLE == ""))
+                        // Brug Acadre PWI i stedet
+                        var AcadreCases = PWIservice.SearchCases(searchCriterion, advancedCaseSearchRequestType.ResponsibleUserId);
+                        // Add to list
+                        foreach(var AcadreCase in AcadreCases)
                         {
-                            foreach (var category in foundCase.Classification.Category)
+                            var user = userList.SingleOrDefault(ut => ut.Id == AcadreCase.ResponsibleUserId.ToString()) ?? UnknownUser;
+
+                            childCases.Add(new ChildCase()
                             {
-                                if (category.Principle == "KL Koder" && category.Literal != searchCriterion.KLE)
-                                    continue;
-                            }
+                                CaseID = AcadreCase.Id,
+                                ChildName = AcadreCase.Description,
+                                ChildCPR = AcadreCase.Title,
+                                CaseManagerInitials = user.Initials,
+                                CaseManagerName = user.Name,
+                                CaseContent = AcadreCase.Content,
+                                IsClosed = AcadreCase.Status.IsClosed,
+                                Note = "",
+                                CaseNumberIdentifier = AcadreCase.Year.ToString().Substring(2,2) + "/" + AcadreCase.SequenceNumber
+                            });
                         }
-                        //string caseIDtemp = foundCase.CaseFileReference;
-
-                        //foundCase = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(caseIDtemp);
-                        // Sagsindhold er valgfrit søgekriterie  
-                        // Barnets navn og KLE er valgfrit søgekriterie
-                        if (searchCriterion.PrimaryContactsName != "" && !foundCase.TitleAlternativeText.Contains(searchCriterion.PrimaryContactsName))
-                        {
-                            continue;
-                        }
-                        var user = userList.SingleOrDefault(ut => ut.Id == foundCase.CaseFileManagerReference);
-                        if (user == null)
-                            return childCases;
-                        childCases.Add(new ChildCase()
-                        {
-                            CaseID = int.Parse(foundCase.CaseFileIdentifier),
-                            ChildName = foundCase.TitleAlternativeText,
-                            ChildCPR = foundCase.CaseFileTitleText,
-                            CaseManagerInitials = user.Initials,
-                            CaseManagerName = user.Name,
-                            CaseContent = foundCase.CustomFields.df1,
-                            IsClosed = foundCase.CaseFileStatusCode == "A",
-                            Note = foundCase.Note,
-                            CaseNumberIdentifier = foundCase.CaseFileNumberIdentifier
-                        });
-
-
-                        //}
+                        return childCases;
+                        // OBS! return
                     }
+                    foundCases.AddRange(result);
                 }
             }
+
+
+            if (!(searchCriterion.KLE == null))
+            {
+                foundCases.RemoveAll(x => !x.Classification.Category.Where(y => y.Equals("KL Koder")).Select(y => y.Literal).Contains(searchCriterion.KLE));
+            }
+
+            
+            foreach (AcadreServiceV7.BUCaseFileType foundCase in foundCases)
+            {
+                var user = userList.SingleOrDefault(ut => ut.Id == foundCase.CaseFileManagerReference) ?? UnknownUser;
+
+                childCases.Add(new ChildCase()
+                {
+                    CaseID = int.Parse(foundCase.CaseFileIdentifier),
+                    ChildName = foundCase.TitleAlternativeText,
+                    ChildCPR = foundCase.CaseFileTitleText,
+                    CaseManagerInitials = user.Initials,
+                    CaseManagerName = user.Name,
+                    CaseContent = foundCase.CustomFields.df1,
+                    IsClosed = foundCase.CaseFileStatusCode == "A",
+                    Note = foundCase.Note,
+                    CaseNumberIdentifier = foundCase.CaseFileNumberIdentifier
+                });
+            }
+
             return childCases;
         }
         public Child GetChildInfo(string CPR)
@@ -198,22 +224,45 @@ namespace AcadreLib
             Child child = new Child();
 
             child = CPRBrokerService.GetChild(CPR);
-            SearchCriterion searchCriterion = new SearchCriterion()
+            var siblings = child.Siblings.ToArray();
+
+            for (int i = 0; i < 1 + child.Siblings.Count(); i++)
             {
-                ChildCPR = CPR,
-                CaseContent = "Løbende journal"
-            };
-            IEnumerable<ChildCase> childCases = SearchChildren(searchCriterion);
-            foreach (var childCase in childCases)
-            {
-                child.CaseID = childCase.CaseID;
-                child.Note = childCase.Note;
-                child.CaseNumberIdentifier = childCase.CaseNumberIdentifier;
-                child.CaseManagerInitials = childCase.CaseManagerInitials;
-                child.CaseManagerName = childCase.CaseManagerName;
-                if (!childCase.IsClosed) // Hvis sagen er afsluttet så bør vi lede videre
-                    return child;
+                if (i == child.Siblings.Count()) CPR = child.SimpleChild.CPR; else CPR = siblings[i].SimpleChild.CPR;
+                SearchCriterion searchCriterion = new SearchCriterion()
+                {
+                    ChildCPR = CPR,
+                    CaseContent = "Løbende journal*"
+                };
+                IEnumerable<ChildCase> childCases = SearchChildren(searchCriterion);
+
+                if (i < child.Siblings.Count())
+                    foreach (var childCase in childCases)
+                    {
+                        siblings[i].CaseID = childCase.CaseID;
+                        siblings[i].Note = childCase.Note;
+                        siblings[i].CaseNumberIdentifier = childCase.CaseNumberIdentifier;
+                        siblings[i].CaseManagerInitials = childCase.CaseManagerInitials;
+                        siblings[i].CaseManagerName = childCase.CaseManagerName;
+                        siblings[i].CaseIsClosed = childCase.IsClosed;
+                        if (!childCase.IsClosed) // Hvis sagen ikke er afsluttet så behøver vi ikke at gå resten igennem
+                            break;
+                    }
+                else
+                    foreach (var childCase in childCases)
+                    {
+                        child.CaseID = childCase.CaseID;
+                        child.Note = childCase.Note;
+                        child.CaseNumberIdentifier = childCase.CaseNumberIdentifier;
+                        child.CaseManagerInitials = childCase.CaseManagerInitials;
+                        child.CaseManagerName = childCase.CaseManagerName;
+                        child.CaseIsClosed = childCase.IsClosed;
+                        if (!childCase.IsClosed) // Hvis sagen ikke er afsluttet så behøver vi ikke at gå resten igennem
+                            return child;
+                    }
             }
+            
+            
             return child;
         }
         public Child GetChildInfo(int CaseID)
@@ -227,6 +276,7 @@ namespace AcadreLib
             child.CaseNumberIdentifier = Case.CaseFileNumberIdentifier;
             child.CaseManagerInitials = user.Initials;
             child.CaseManagerName = user.Name;
+            child.CaseIsClosed = Case.CaseFileStatusCode == "A";
             return child;
         }
         public int CreateChildJournal(string CPR, int AcadreOrgID, string CaseManagerInitials)
@@ -247,59 +297,21 @@ namespace AcadreLib
             int RecommendationID = 1;
             int CategoryID = 4;
 
-            // AcadreOrgID = "58"; // Sagsansvarlig Enhed, OBS! skal ændres til at bruge brugerens organisationsplacering
-            AcadreServiceV7.CaseFileType3 Case;
+            // Find informationer om barnet og eventuelle eksisterende sager
+            var childinfo = GetChildInfo(CPR);
 
-            // Undersøger om sagen allerede eksisterer
-            AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
-            searchCriterion.CaseFileTitleText = CPR;
-            searchCriterion.CaseFileTypeCode = CaseFileTypeCode;
-            searchCriterion.CustomFields = new AcadreServiceV7.CustomField[] { new AcadreServiceV7.CustomField { Value = CaseContent, Name = "df1" } };
-            searchCriterion.ClassificationCriterion = new AcadreServiceV7.ClassificationCriterionType[]
-            {
-                new AcadreServiceV7.ClassificationCriterionType()
-                {
-                    ClassificationLiteral = KLE,
-                    PrincipleLiteral = "KL Koder"
-                }
-            };
-            string CurrentCaseFileStatusCode = "";
-            string CurrentCaseID = "";
-
-            // Kigger alle fundne sager igennem og tjekker om de indeholder "Løbende journal" i sagsindhold (CaseContent)
-            foreach (AcadreServiceV7.CaseSearchResponseType foundCase in caseService.SearchCases(searchCriterion))
-            {
-
-                Case = caseService.GetCase(foundCase.CaseFileReference);
-
-                //if (Case.CustomFields.df1.Contains(CaseContent))
-                //{
-                if (Case.CaseFileStatusCode == "B") // Er sagen åben?
-                {
-                    CurrentCaseID = foundCase.CaseFileReference;
-                    CurrentCaseFileStatusCode = "B";
-                    break; // Der blev fundet en åben sag. Så behøver vi ikke at lede mere
-                }
-                else if (Case.CaseFileStatusCode == "A" && CurrentCaseFileStatusCode != "B")
-                {
-                    CurrentCaseID = foundCase.CaseFileReference;
-                    CurrentCaseFileStatusCode = "A";
-                    // Der blev fundet en lukket sag, men vi leder videre for at se om der er en åben sag
-                }
-                //}
-            }
             // Hvis der blev fundet en åben sag så returneres denne sags CaseID. Hvis der kun blev fundet en lukket sag så returneres -1.
-            if (CurrentCaseID != "")
+            if (childinfo.CaseID != 0 && !caseService.Url.Contains("esdhwebtest2"))
             {
-                if (CurrentCaseFileStatusCode == "B")
-                { }//return int.Parse(CurrentCaseID);
+                if (!childinfo.CaseIsClosed)
+                    return childinfo.CaseID;
                 else
                     return -1;
             }
 
             // look up contact by cprnumber
-            string contactGUID;
-            string contactName;
+            string PrimarycontactGUID;
+            string PrimarycontactName;
             var searchContactCriterion = new AcadreServiceV7.SearchContactCriterionType2();
             searchContactCriterion.ContactTypeName = "Person";
             searchContactCriterion.SearchTerm = CPR;
@@ -307,8 +319,8 @@ namespace AcadreLib
             if (foundContacts.Length > 0)
             {
                 // contact already exists, read GUID and name
-                contactGUID = foundContacts.First().GUID;
-                contactName = foundContacts.First().ContactTitle;
+                PrimarycontactGUID = foundContacts.First().GUID;
+                PrimarycontactName = foundContacts.First().ContactTitle;
             }
             else
             {
@@ -326,8 +338,36 @@ namespace AcadreLib
                 var contact = new AcadreServiceV7.PersonType2();
                 contact.PersonCivilRegistrationIdentifierStatusCode = "0";
                 contact.PersonCivilRegistrationIdentifier = CPR;
-                contact.PersonNameForAddressingName = contactName = simplePerson.FullName;
-                contactGUID = contactService.CreateContact(contact);
+                contact.PersonNameForAddressingName = PrimarycontactName = simplePerson.FullName;
+                PrimarycontactGUID = contactService.CreateContact(contact);
+            }
+
+            // Forældre skal også med som kontakter
+            var parents = new List<SimplePerson>();
+            parents.AddRange(childinfo.Mom);parents.AddRange(childinfo.Dad);
+            var parentsGUI = new List<string>();
+            foreach (var parent in parents)
+            {
+                var AcadreContact = contactService.SearchContacts(new AcadreServiceV7.SearchContactCriterionType2() { ContactTypeName = "Person", SearchTerm = parent.CPR }).FirstOrDefault();
+                if (AcadreContact != null)
+                    parentsGUI.Add(AcadreContact.GUID);
+                else
+                {
+                    SimplePerson simplePerson;
+                    try
+                    {
+                        simplePerson = CPRBrokerService.GetSimplePersonByCPR(CPR);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("CPR-nummeret (" + CPR + ") kunne ikke findes i CPR-registret", e);
+                    }
+                    var contact = new AcadreServiceV7.PersonType2();
+                    contact.PersonCivilRegistrationIdentifierStatusCode = "0";
+                    contact.PersonCivilRegistrationIdentifier = CPR;
+                    contact.PersonNameForAddressingName = simplePerson.FullName;
+                    parentsGUI.Add(contactService.CreateContact(contact));
+                }
             }
 
             var createCaseRequest = new AcadreServiceV7.CreateCaseRequestType();
@@ -352,7 +392,7 @@ namespace AcadreLib
             caseFile.Year = DateTime.Now.Year.ToString();
             caseFile.CreationDate = DateTime.Now;
             caseFile.CaseFileTitleText = CPR;
-            caseFile.TitleAlternativeText = contactName;
+            caseFile.TitleAlternativeText = PrimarycontactName;
             caseFile.RestrictedFromPublicText = PublicationRestriction;
             caseFile.CaseFileStatusCode = CaseStatus;
             caseFile.CaseFileDisposalCode = CaseDisposalCode;
@@ -367,7 +407,7 @@ namespace AcadreLib
             caseFile.CustomFieldCollection = new AcadreServiceV7.CustomField[]
             {
                             new AcadreServiceV7.CustomField(){Name = "df1",Value = CaseContent}
-                            ,new AcadreServiceV7.CustomField(){Name = "df25",Value = contactGUID} //contactGUID
+                            ,new AcadreServiceV7.CustomField(){Name = "df25",Value = PrimarycontactGUID} //contactGUID
             };
 
             caseFile.Classification = new AcadreServiceV7.ClassificationType
@@ -378,14 +418,30 @@ namespace AcadreLib
                         }
             };
 
-            caseFile.Party = new AcadreServiceV7.PartyType[] { new AcadreServiceV7.PartyType() {
-                            CreationDate = DateTime.Now
-                            ,ContactReference = contactGUID
-                            ,PublicAccessLevelReference = "3"
-                            ,IsPrimary = true
-                        } };
+            // Barnet tilføjes som primær part og forældre tilføjes som parter
+            caseFile.Party = new AcadreServiceV7.PartyType[1 + parentsGUI.Count];
+            caseFile.Party[0] = new AcadreServiceV7.PartyType()
+                {
+                    CreationDate = DateTime.Now
+                    ,ContactReference = PrimarycontactGUID
+                    ,PublicAccessLevelReference = "3"
+                    ,IsPrimary = true
+                };
+            int i = 1;
+            foreach(var parentGUI in parentsGUI)
+            {
+                caseFile.Party[i] = new AcadreServiceV7.PartyType()
+                {
+                    CreationDate = DateTime.Now
+                    ,ContactReference = parentGUI
+                    ,PublicAccessLevelReference = "3"
+                    ,IsPrimary = false
+                };
+                i++;
+            }
 
             createCaseRequest.CaseFile = caseFile;
+
 
             var userList = configurationService.GetUserList(new AcadreServiceV7.EmptyRequestType()).ToList();
             var user = userList.SingleOrDefault(ut => ut.Initials == CaseManagerInitials);
@@ -395,6 +451,7 @@ namespace AcadreLib
             }
             //createCaseRequest.CaseFile.
             var createCaseResponse = caseService.CreateCase(createCaseRequest);
+
             // check for multicase (samlesag) response.
             if (createCaseResponse.CreateCaseAndAMCResult == AcadreServiceV7.CreateCaseAndAMCResultType.CaseNotCreatedAndListAMCReceived)
             {
@@ -409,7 +466,7 @@ namespace AcadreLib
             List<ChildCase> childCases = new List<ChildCase>();
             AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
             string CPR = Case.CaseFileTitleText;
-
+            
             AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
             searchCriterion.CaseFileTitleText = CPR;
             searchCriterion.CaseFileTypeCode = CaseFileTypeCode;
@@ -440,32 +497,34 @@ namespace AcadreLib
         public IEnumerable<JournalDocument> GetChildJournalDocuments(int CaseID)
         {
             List<JournalDocument> journalDocuments = new List<JournalDocument>();
-            var childCases = GetChildCases(CaseID);
+            AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
+            AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
+            searchCriterion.CaseFileTitleText = Case.CaseFileTitleText;
+            searchCriterion.CaseFileTypeCode = CaseFileTypeCode;
             // Henter dokumenter
-            foreach (ChildCase childCase in childCases)
+            foreach (AcadreServiceV7.CaseSearchResponseType foundCase in caseService.SearchCases(searchCriterion))
             {
-                journalDocuments.AddRange(GetChildCaseDocuments(childCase.CaseID));
+                journalDocuments.AddRange(GetChildCaseDocuments(int.Parse(foundCase.CaseFileReference)));
             }
-
-            // Henter notater
-            var Case = caseService.GetCase(CaseID.ToString());
+            //FlowDocument document = new FlowDocument();
             foreach (var memo in memoService4.GetAllMemo(CaseID.ToString()))
             {
-                var outputbinary = documentService4.GetPhysicalDocument(new AcadreServiceV4.FileVersionReferenceType()
+                if (memo == null)
                 {
-                    FileReference = memo.MemoFileReference,
-                    Version = "1"
-                });
-                FlowDocument document = new FlowDocument();
-                TextRange txtRange = null;
-                using (MemoryStream stream = new MemoryStream(outputbinary))
-                {
-                    // create a TextRange around the entire document
-                    txtRange = new TextRange(document.ContentStart, document.ContentEnd);
-                    txtRange.Load(stream, DataFormats.Rtf);
+                    throw new Exception("Der opstod en fejl ved udtræk af journalnotater: Den kaldte metode returnerede null værdier");
                 }
-                var memo7 = memoService.GetMemo(memo.MemoIdentifier);
-                var memo4 = memoService4.GetMemo(memo.MemoIdentifier);
+                //var outputbinary = documentService4.GetPhysicalDocument(new AcadreServiceV4.FileVersionReferenceType()
+                //{
+                //    FileReference = memo.MemoFileReference,
+                //    Version = "1"
+                //});
+                //TextRange txtRange;
+                //using (MemoryStream stream = new MemoryStream(outputbinary))
+                //{
+                //    // create a TextRange around the entire document
+                //    txtRange = new TextRange(document.ContentStart, document.ContentEnd);
+                //    txtRange.Load(stream, DataFormats.Rtf);
+                //}
                 journalDocuments.Add(new JournalDocument
                 {
                     Type = "Memo",
@@ -474,63 +533,10 @@ namespace AcadreLib
                     LastChangedDate = memo.MemoEventDate,
                     CaseID = CaseID,
                     CaseNumberIdentifier = Case.CaseFileNumberIdentifier,
-                    DocumentMemoDescription = txtRange.Text // Her skal der bruges indholdet af notatet
+                    DocumentMemoDescription = "" // txtRange.Text // Her skal der bruges indholdet af notatet
                 });
             }
 
-            return journalDocuments;
-        }
-        // Denne metode er kun midlertidig ind til Formpipe får løst problemet med GetAllMemo
-        public IEnumerable<JournalDocument> GetChildJournalDocuments(int CaseID, int[] MemoIDs)
-        {
-            List<JournalDocument> journalDocuments = new List<JournalDocument>();
-            AcadreServiceV4.MemoType memo;
-            byte[] outputbinary;
-            var childCases = GetChildCases(CaseID);
-            // Henter dokumenter
-            foreach (ChildCase childCase in childCases)
-            {
-                journalDocuments.AddRange(GetChildCaseDocuments(childCase.CaseID));
-            }
-            var Case = caseService.GetCase(CaseID.ToString());
-            if (MemoIDs == null)
-                return journalDocuments;
-
-            foreach (var MemoID in MemoIDs)
-            {
-                try
-                {
-                    memo = memoService4.GetMemo(MemoID.ToString());
-                    outputbinary = documentService4.GetPhysicalDocument(new AcadreServiceV4.FileVersionReferenceType()
-                    {
-                        FileReference = memo.MemoFileReference,
-                        Version = "1"
-                    });
-                }
-                catch (Exception e)
-                {
-                    //throw new Exception("Kunne ikke hente journalnotat " + MemoID + " på sagen",e);
-                    continue;
-                }
-                FlowDocument document = new FlowDocument();
-                TextRange txtRange = null;
-                using (MemoryStream stream = new MemoryStream(outputbinary))
-                {
-                    // create a TextRange around the entire document
-                    txtRange = new TextRange(document.ContentStart, document.ContentEnd);
-                    txtRange.Load(stream, DataFormats.Rtf);
-                }
-                journalDocuments.Add(new JournalDocument
-                {
-                    Type = "Memo",
-                    DocumentID = MemoID,
-                    Title = memo.MemoTitleText,
-                    LastChangedDate = memo.MemoEventDate,
-                    CaseID = CaseID,
-                    CaseNumberIdentifier = Case.CaseFileNumberIdentifier,
-                    DocumentMemoDescription = txtRange.Text // Her skal der bruges indholdet af notatet
-                });
-            }
             return journalDocuments;
         }
         public IEnumerable<JournalDocument> GetChildCaseDocuments(int CaseID)
@@ -541,7 +547,6 @@ namespace AcadreLib
             string caseNumberIdentifier = Case.CaseFileNumberIdentifier;
             foreach (var document in documentService.GetAllDocuments(CaseID.ToString()))
             {
-                var document7 = documentService.GetMainDocument(document.Document.DocumentIdentifier);
                 journalDocuments.Add(new JournalDocument
                 {
                     Type = "Document",
@@ -628,17 +633,39 @@ namespace AcadreLib
             var memoId = int.Parse(memoService.CreateMemo(tempMemo));
             return memoId;
         }
-        // Changes the Responsible CaseManager on all the childrens cases where the CaseManagerInitials = CaseManagerInitialsFrom. If CaseManagerInitialsFrom is "" then all child cases CaseManager is changed to CaseManagerInitialsTo.
-        public void ChangeChildResponsible(string oldCaseManagerInitials, string newCaseManagerInitials, int CaseID)
+        // Changes the Responsible CaseManager on all the childrens cases where the CaseManagerInitials = oldCaseManagerInitials. If oldCaseManagerInitials is "" then all child cases CaseManager is changed to newCaseManagerInitials.
+        public void ChangeChildResponsible(string oldCaseManagerInitials, string newCaseManagerInitials, int newAcadreOrgID, int CaseID)
         {
             List<ChildCase> childCases = new List<ChildCase>();
+            var userList = configurationService.GetUserList(new AcadreServiceV7.EmptyRequestType()).ToList();
+            var newUser = userList.SingleOrDefault(ut => ut.Initials == newCaseManagerInitials);
+            if (newUser == null)
+                throw new Exception("Der fandtes ikke en bruger i Acadre med initialerne " + newCaseManagerInitials);
+
             AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
+            if (!Case.CustomFieldCollection.Single(x => x.Name == "df1").Value.Contains("Løbende "))
+            {
+                Case.CaseFileManagerReference = newUser.Id;
+                Case.AdministrativeUnit = new AcadreServiceV7.AdministrativeUnitType[]
+                {
+                    new AcadreServiceV7.AdministrativeUnitType() { AdministrativeUnitReference = newAcadreOrgID.ToString()}
+                };
+                try
+                {
+                    caseService.UpdateCase(Case);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Kunne ikke opdatere Acadre sagen", e);
+                }
+                return;
+            }
             string CPR = Case.CaseFileTitleText;
 
             AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
             searchCriterion.CaseFileTitleText = CPR;
             searchCriterion.CaseFileTypeCode = CaseFileTypeCode;
-            var userList = configurationService.GetUserList(new AcadreServiceV7.EmptyRequestType()).ToList();
+
             foreach (AcadreServiceV7.CaseSearchResponseType foundCase in caseService.SearchCases(searchCriterion))
             {
                 Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(foundCase.CaseFileReference);
@@ -647,9 +674,6 @@ namespace AcadreLib
                     user = new AcadreServiceV7.UserType { Initials = "" };
                 if (user.Initials == oldCaseManagerInitials || oldCaseManagerInitials == "" || user.Initials == "")
                 {
-                    var newUser = userList.SingleOrDefault(ut => ut.Initials == newCaseManagerInitials);
-                    if (newUser == null)
-                        throw new Exception("Der fandtes ikke en bruger i Acadre med initialerne " + newCaseManagerInitials);
                     Case.CaseFileManagerReference = newUser.Id;
                     try
                     {

@@ -46,7 +46,7 @@ namespace AcadreLib
         public Child GetChild(string cpr)
         {            
             Child child = new Child();
-            List<SimplePerson> siblings = new List<SimplePerson>();
+            List<Child> siblings = new List<Child>();
             CPRBroker.PersonFlerRelationType[] FatherChildren = null;
             CPRBroker.PersonFlerRelationType[] MotherChildren = null;
             CPRBroker.RegistreringType1 FatherOutput;
@@ -98,12 +98,15 @@ namespace AcadreLib
                         if (MotherChild.ReferenceID.Item == FatherChild.ReferenceID.Item && MotherChild.ReferenceID.Item != ChildUUID)
                         {
                             var SiblingOutput = wrapper.GetItem(MotherChild.ReferenceID.Item);
-                            siblings.Add(new SimplePerson()
+                            siblings.Add(new Child()
                             {
-                                FirstName = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonGivenName,
-                                MiddleName = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonMiddleName,
-                                Surname = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonSurnameName,
-                                CPR = ((CPRBroker.CprBorgerType)SiblingOutput.AttributListe.RegisterOplysning[0].Item).PersonCivilRegistrationIdentifier
+                                SimpleChild = new SimplePerson()
+                                {
+                                    FirstName = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonGivenName,
+                                    MiddleName = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonMiddleName,
+                                    Surname = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonSurnameName,
+                                    CPR = ((CPRBroker.CprBorgerType)SiblingOutput.AttributListe.RegisterOplysning[0].Item).PersonCivilRegistrationIdentifier
+                                }
                             });
                         }
                     }
