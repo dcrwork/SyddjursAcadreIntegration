@@ -69,7 +69,6 @@
     <Compile Include="Config.cs" />
     <Compile Include="CPRBrokerService.cs" />
     <Compile Include="CPRBrokerWrapper.cs" />
-    <Compile Include="AcadreLibChildCase.cs" />
     <Compile Include="JournalDocument.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="MemoRequest.cs" />

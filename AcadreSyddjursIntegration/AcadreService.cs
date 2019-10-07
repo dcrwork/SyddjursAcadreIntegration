@@ -636,7 +636,6 @@ namespace AcadreLib
         // Changes the Responsible CaseManager on all the childrens cases where the CaseManagerInitials = oldCaseManagerInitials. If oldCaseManagerInitials is "" then all child cases CaseManager is changed to newCaseManagerInitials.
         public void ChangeChildResponsible(string oldCaseManagerInitials, string newCaseManagerInitials, int newAcadreOrgID, int CaseID)
         {
-            List<ChildCase> childCases = new List<ChildCase>();
             var userList = configurationService.GetUserList(new AcadreServiceV7.EmptyRequestType()).ToList();
             var newUser = userList.SingleOrDefault(ut => ut.Initials == newCaseManagerInitials);
             if (newUser == null)
@@ -685,6 +684,28 @@ namespace AcadreLib
                     }
                 }
             }
+        }
+        public void ChangeCaseContent(string newContent,int CaseID)
+        {
+            AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
+
+            for (int i = 0;i < Case.CustomFieldCollection.Count();i++)
+            {
+                if(Case.CustomFieldCollection[i].Name == "df1")
+                {
+                    Case.CustomFieldCollection[i].Value = newContent;
+                    break;
+                }
+            }
+            try
+            {
+                caseService.UpdateCase(Case);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Kunne ikke opdatere Acadre sagen", e);
+            }
+            return;
         }
         private AcadreServiceV7.UserType GetUser(string UserReference)
         {
