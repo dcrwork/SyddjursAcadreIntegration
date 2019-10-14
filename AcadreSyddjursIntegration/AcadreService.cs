@@ -223,12 +223,44 @@ namespace AcadreLib
         {
             Child child = new Child();
 
-            child = CPRBrokerService.GetChild(CPR);
-            var siblings = child.Siblings.ToArray();
-
-            for (int i = 0; i < 1 + child.Siblings.Count(); i++)
+            SearchCriterion searchCriterion = new SearchCriterion()
             {
-                if (i == child.Siblings.Count()) CPR = child.SimpleChild.CPR; else CPR = siblings[i].SimpleChild.CPR;
+                ChildCPR = CPR,
+                CaseContent = "Løbende journal*"
+            };
+            IEnumerable<ChildCase> childCases = SearchChildren(searchCriterion);
+            foreach (var childCase in childCases)
+            {
+                child.CaseID = childCase.CaseID;
+                child.Note = childCase.Note;
+                child.CaseNumberIdentifier = childCase.CaseNumberIdentifier;
+                child.CaseManagerInitials = childCase.CaseManagerInitials;
+                child.CaseManagerName = childCase.CaseManagerName;
+                child.CaseIsClosed = childCase.IsClosed;
+                if (!childCase.IsClosed) // Hvis sagen ikke er afsluttet så behøver vi ikke at gå resten igennem
+                    break;
+            }
+            return GetChildInfo(child.CaseID);
+        }
+        public Child GetChildInfo(int CaseID)
+        {
+            string CPR;
+            Child child = new Child();
+            AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
+            var user = GetUser(Case.CaseFileManagerReference);
+            child = CPRBrokerService.GetChild(Case.CaseFileTitleText);
+
+            child.Note = Case.Note;
+            child.CaseID = CaseID;
+            child.CaseNumberIdentifier = Case.CaseFileNumberIdentifier;
+            child.CaseManagerInitials = user.Initials;
+            child.CaseManagerName = user.Name;
+            child.CaseIsClosed = Case.CaseFileStatusCode == "A";
+
+            var siblings = child.Siblings.ToArray();
+            for (int i = 0; i < child.Siblings.Count(); i++)
+            {
+                CPR = siblings[i].SimpleChild.CPR;
                 SearchCriterion searchCriterion = new SearchCriterion()
                 {
                     ChildCPR = CPR,
@@ -236,47 +268,18 @@ namespace AcadreLib
                 };
                 IEnumerable<ChildCase> childCases = SearchChildren(searchCriterion);
 
-                if (i < child.Siblings.Count())
-                    foreach (var childCase in childCases)
-                    {
-                        siblings[i].CaseID = childCase.CaseID;
-                        siblings[i].Note = childCase.Note;
-                        siblings[i].CaseNumberIdentifier = childCase.CaseNumberIdentifier;
-                        siblings[i].CaseManagerInitials = childCase.CaseManagerInitials;
-                        siblings[i].CaseManagerName = childCase.CaseManagerName;
-                        siblings[i].CaseIsClosed = childCase.IsClosed;
-                        if (!childCase.IsClosed) // Hvis sagen ikke er afsluttet så behøver vi ikke at gå resten igennem
-                            break;
-                    }
-                else
-                    foreach (var childCase in childCases)
-                    {
-                        child.CaseID = childCase.CaseID;
-                        child.Note = childCase.Note;
-                        child.CaseNumberIdentifier = childCase.CaseNumberIdentifier;
-                        child.CaseManagerInitials = childCase.CaseManagerInitials;
-                        child.CaseManagerName = childCase.CaseManagerName;
-                        child.CaseIsClosed = childCase.IsClosed;
-                        if (!childCase.IsClosed) // Hvis sagen ikke er afsluttet så behøver vi ikke at gå resten igennem
-                            return child;
-                    }
+                foreach (var childCase in childCases)
+                {
+                    siblings[i].CaseID = childCase.CaseID;
+                    siblings[i].Note = childCase.Note;
+                    siblings[i].CaseNumberIdentifier = childCase.CaseNumberIdentifier;
+                    siblings[i].CaseManagerInitials = childCase.CaseManagerInitials;
+                    siblings[i].CaseManagerName = childCase.CaseManagerName;
+                    siblings[i].CaseIsClosed = childCase.IsClosed;
+                    if (!childCase.IsClosed) // Hvis sagen ikke er afsluttet så behøver vi ikke at gå resten igennem
+                        break;
+                }
             }
-            
-            
-            return child;
-        }
-        public Child GetChildInfo(int CaseID)
-        {
-            Child child = new Child();
-            AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
-            var user = GetUser(Case.CaseFileManagerReference);
-            child = CPRBrokerService.GetChild(Case.CaseFileTitleText);
-            child.Note = Case.Note;
-            child.CaseID = CaseID;
-            child.CaseNumberIdentifier = Case.CaseFileNumberIdentifier;
-            child.CaseManagerInitials = user.Initials;
-            child.CaseManagerName = user.Name;
-            child.CaseIsClosed = Case.CaseFileStatusCode == "A";
             return child;
         }
         public int CreateChildJournal(string CPR, int AcadreOrgID, string CaseManagerInitials)
