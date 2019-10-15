@@ -221,7 +221,7 @@ namespace AcadreLib
         }
         public Child GetChildInfo(string CPR)
         {
-            Child child = new Child();
+            int CaseID = 0;
 
             SearchCriterion searchCriterion = new SearchCriterion()
             {
@@ -231,16 +231,14 @@ namespace AcadreLib
             IEnumerable<ChildCase> childCases = SearchChildren(searchCriterion);
             foreach (var childCase in childCases)
             {
-                child.CaseID = childCase.CaseID;
-                child.Note = childCase.Note;
-                child.CaseNumberIdentifier = childCase.CaseNumberIdentifier;
-                child.CaseManagerInitials = childCase.CaseManagerInitials;
-                child.CaseManagerName = childCase.CaseManagerName;
-                child.CaseIsClosed = childCase.IsClosed;
+                CaseID = childCase.CaseID;
                 if (!childCase.IsClosed) // Hvis sagen ikke er afsluttet så behøver vi ikke at gå resten igennem
                     break;
             }
-            return GetChildInfo(child.CaseID);
+            if (CaseID != 0)
+                return GetChildInfo(CaseID);
+            else
+                return CPRBrokerService.GetChild(CPR);
         }
         public Child GetChildInfo(int CaseID)
         {
