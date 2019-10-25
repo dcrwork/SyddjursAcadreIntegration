@@ -37,8 +37,32 @@ namespace AcadreLib
             simplePerson.Surname = OutputItem.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonSurnameName;
 
             Address address = wrapper.GetAddress(OutputItem);
+            CPRBroker.RegisterOplysningType registerOplysning = null;
+            foreach (var RegisterOplysning in OutputItem.AttributListe.RegisterOplysning)
+            {
+                DateTime Fra;
+                DateTime Til;
+                try
+                {
+                    Fra = (DateTime)RegisterOplysning.Virkning.FraTidspunkt.Item;
+                }
+                catch
+                {
+                    Fra = DateTime.MinValue;
+                }
+                try
+                {
+                    Til = (DateTime)RegisterOplysning.Virkning.TilTidspunkt.Item;
+                }
+                catch
+                {
+                    Til = DateTime.MaxValue;
+                }
+                if (Fra < DateTime.Now && Til > DateTime.Now)
+                { registerOplysning = RegisterOplysning; break; }
+            }
 
-            simplePerson.NameAddressProtection = ((CPRBroker.CprBorgerType)OutputItem.AttributListe.RegisterOplysning[0].Item).NavneAdresseBeskyttelseIndikator;
+            simplePerson.NameAddressProtection = ((CPRBroker.CprBorgerType)registerOplysning.Item).NavneAdresseBeskyttelseIndikator;
             simplePerson.Address = address;
             simplePerson.CPR = ((CPRBroker.CprBorgerType)OutputItem.AttributListe.RegisterOplysning[0].Item).PersonCivilRegistrationIdentifier;
             return simplePerson;
@@ -119,11 +143,11 @@ namespace AcadreLib
                 List<string> CustodyOwnersNames = new List<string>();
                 foreach (var custodyOwner in ChildOutput.RelationListe.Foraeldremyndighedsindehaver)
                 {
-                    if (custodyOwner == ChildOutput.RelationListe.Fader[0])
+                    if (custodyOwner == (ChildOutput.RelationListe.Fader ?? new CPRBroker.PersonRelationType[] {}).FirstOrDefault())
                     {
                         CustodyOwnersNames.Add(child.Dad.First().FullName);
                     }
-                    else if (custodyOwner == ChildOutput.RelationListe.Moder[0])
+                    else if (custodyOwner == (ChildOutput.RelationListe.Moder ?? new CPRBroker.PersonRelationType[] { }).FirstOrDefault())
                     {
                         CustodyOwnersNames.Add(child.Mom.First().FullName);
                     }

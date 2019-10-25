@@ -255,6 +255,9 @@ namespace AcadreLib
             child.CaseManagerName = user.Name;
             child.CaseIsClosed = Case.CaseFileStatusCode == "A";
 
+            if (child.Siblings == null)
+                return child;
+
             var siblings = child.Siblings.ToArray();
             for (int i = 0; i < child.Siblings.Count(); i++)
             {
@@ -278,6 +281,7 @@ namespace AcadreLib
                         break;
                 }
             }
+            child.Siblings = siblings.AsEnumerable();
             return child;
         }
         public int CreateChildJournal(string CPR, int AcadreOrgID, string CaseManagerInitials)
@@ -302,7 +306,7 @@ namespace AcadreLib
             var childinfo = GetChildInfo(CPR);
 
             // Hvis der blev fundet en åben sag så returneres denne sags CaseID. Hvis der kun blev fundet en lukket sag så returneres -1.
-            if (childinfo.CaseID != 0 && !caseService.Url.Contains("esdhwebtest2"))
+            if (childinfo.CaseID != 0 && !caseService.Url.Contains("esdhtest2"))
             {
                 if (!childinfo.CaseIsClosed)
                     return childinfo.CaseID;
@@ -310,65 +314,16 @@ namespace AcadreLib
                     return -1;
             }
 
-            // look up contact by cprnumber
-            string PrimarycontactGUID;
-            string PrimarycontactName;
-            var searchContactCriterion = new AcadreServiceV7.SearchContactCriterionType2();
-            searchContactCriterion.ContactTypeName = "Person";
-            searchContactCriterion.SearchTerm = CPR;
-            var foundContacts = contactService.SearchContacts(searchContactCriterion);
-            if (foundContacts.Length > 0)
-            {
-                // contact already exists, read GUID and name
-                PrimarycontactGUID = foundContacts.First().GUID;
-                PrimarycontactName = foundContacts.First().ContactTitle;
-            }
-            else
-            {
-                // forsøger at finde CPR i CPR Broker
-                SimplePerson simplePerson;
-                try
-                {
-                    simplePerson = CPRBrokerService.GetSimplePersonByCPR(CPR);
-                }
-                catch (Exception e)
-                {
-                    throw new Exception("CPR-nummeret (" + CPR + ") kunne ikke findes i CPR-registret", e);
-                }
-                // contact doesn't exist - create it and assign GUID
-                var contact = new AcadreServiceV7.PersonType2();
-                contact.PersonCivilRegistrationIdentifierStatusCode = "0";
-                contact.PersonCivilRegistrationIdentifier = CPR;
-                contact.PersonNameForAddressingName = PrimarycontactName = simplePerson.FullName;
-                PrimarycontactGUID = contactService.CreateContact(contact);
-            }
+            // look up contact by cpr number
+            var PrimaryContact = GetCreateAcadreContact(CPR);
 
             // Forældre skal også med som kontakter
             var parents = new List<SimplePerson>();
-            parents.AddRange(childinfo.Mom);parents.AddRange(childinfo.Dad);
+            parents.AddRange(childinfo.Mom ?? new SimplePerson[] { }); parents.AddRange(childinfo.Dad ?? new SimplePerson[] { });
             var parentsGUI = new List<string>();
             foreach (var parent in parents)
             {
-                var AcadreContact = contactService.SearchContacts(new AcadreServiceV7.SearchContactCriterionType2() { ContactTypeName = "Person", SearchTerm = parent.CPR }).FirstOrDefault();
-                if (AcadreContact != null)
-                    parentsGUI.Add(AcadreContact.GUID);
-                else
-                {
-                    SimplePerson simplePerson;
-                    try
-                    {
-                        simplePerson = CPRBrokerService.GetSimplePersonByCPR(CPR);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("CPR-nummeret (" + CPR + ") kunne ikke findes i CPR-registret", e);
-                    }
-                    var contact = new AcadreServiceV7.PersonType2();
-                    contact.PersonCivilRegistrationIdentifierStatusCode = "0";
-                    contact.PersonCivilRegistrationIdentifier = CPR;
-                    contact.PersonNameForAddressingName = simplePerson.FullName;
-                    parentsGUI.Add(contactService.CreateContact(contact));
-                }
+                parentsGUI.Add(GetCreateAcadreContact(parent.CPR).GUID);
             }
 
             var createCaseRequest = new AcadreServiceV7.CreateCaseRequestType();
@@ -393,7 +348,7 @@ namespace AcadreLib
             caseFile.Year = DateTime.Now.Year.ToString();
             caseFile.CreationDate = DateTime.Now;
             caseFile.CaseFileTitleText = CPR;
-            caseFile.TitleAlternativeText = PrimarycontactName;
+            caseFile.TitleAlternativeText = PrimaryContact.ContactTitle;
             caseFile.RestrictedFromPublicText = PublicationRestriction;
             caseFile.CaseFileStatusCode = CaseStatus;
             caseFile.CaseFileDisposalCode = CaseDisposalCode;
@@ -408,7 +363,7 @@ namespace AcadreLib
             caseFile.CustomFieldCollection = new AcadreServiceV7.CustomField[]
             {
                             new AcadreServiceV7.CustomField(){Name = "df1",Value = CaseContent}
-                            ,new AcadreServiceV7.CustomField(){Name = "df25",Value = PrimarycontactGUID} //contactGUID
+                            ,new AcadreServiceV7.CustomField(){Name = "df25",Value = PrimaryContact.GUID} //contactGUID
             };
 
             caseFile.Classification = new AcadreServiceV7.ClassificationType
@@ -424,7 +379,7 @@ namespace AcadreLib
             caseFile.Party[0] = new AcadreServiceV7.PartyType()
                 {
                     CreationDate = DateTime.Now
-                    ,ContactReference = PrimarycontactGUID
+                    ,ContactReference = PrimaryContact.GUID
                     ,PublicAccessLevelReference = "3"
                     ,IsPrimary = true
                 };
@@ -712,6 +667,238 @@ namespace AcadreLib
         {
             var userList = configurationService.GetUserList(new AcadreServiceV7.EmptyRequestType()).ToList(); // Herfra kan CaseManager aflæses
             return userList.SingleOrDefault(ut => ut.Id == UserReference);
+        }
+
+        public string CreateCase(
+            /* Case party's name */
+            string personNameForAddressingName,
+            /* Case party's CPR number */
+            string personCivilRegistrationNumber,
+            /* Case type. One of the following:
+			 * "EMSAG" (emnesag)
+			 * "BGSAG" (borgersag)
+			 * "EJSAG" (ejendomssag)
+			 * "PERSAG" (personalesag)
+			 * "BYGGESAG" (byggesag) 
+			 * "BUSAG" (Børn og unge sag)*/
+            string caseFileTypeCode,
+            /* Security code. One of the following:
+			 * "BO" (borgersag)
+			 * "KK" (kommunekode)
+			 * "LP" (lukket punkt)
+			 * "PP" (personpunkt) */
+            string accessCode,
+            /* Case title */
+            string caseFileTitleText,
+            /* KLE journalizing code (http://www.kle-online.dk/emneplan/00/) */
+            string journalizingCode,
+            /* KLE facet for the specified journalizing code */
+            string facet,
+            /* Username of the user creating this case; get from Active Directory
+             * (the AcadreServiceFactory.GetConfigurationService7().GetUserList(...) method will
+             * return a full list) */
+            string caseResponsible,
+            /* Identifier of the administrative unit; should probably be "80" for "Løn og personale"
+             * (the AcadreServiceFactory.GetConfigurationService7().GetAdminUnitList(...) method
+             * will return a full list) */
+            string administrativeUnit,
+            /* Case content */
+            string caseContent,
+            /* Discard code. One of the following(?):
+             * "B" (bevares),
+             * "K" (kasseres),
+             * "K5" (kasseres efter 5 år),
+             * "K10" (kasseres efter 10 år)
+             * "K20" (kasseres efter 20 år) */
+            string caseFileDisposalCode,
+            /* Deletion code; "P1800D" seems to be the standard value here */
+            string deletionCode,
+            string caseRestrictedFromPublicText,
+            string SpecialistID,
+            string RecommendationID,
+            string CategoryID,
+            string SubType
+            )
+        {
+
+            // look up contact by cprnumber
+            var searchContactCriterion = new AcadreServiceV7.SearchContactCriterionType2();
+            searchContactCriterion.ContactTypeName = "Person";
+            searchContactCriterion.SearchTerm = personCivilRegistrationNumber;
+
+            AcadreServiceV7.ContactSearchResponseType[] foundContacts =
+                contactService.SearchContacts(searchContactCriterion);
+
+            var PrimaryContact = GetCreateAcadreContact(personCivilRegistrationNumber);
+
+            // create the case
+            var createCaseRequest = new AcadreServiceV7.CreateCaseRequestType();
+
+            AcadreServiceV7.CaseFileType3 caseFile;
+            if (caseFileTypeCode == "BUSAG")
+            {
+                AcadreServiceV7.BUCaseFileType BUcaseFile = new AcadreServiceV7.BUCaseFileType();
+                try
+                {
+                    BUcaseFile.SpecialistId = int.Parse(SpecialistID); // Faggruppe
+                    BUcaseFile.SpecialistIdSpecified = true;
+                }
+                catch (Exception ex)
+                {
+                    BUcaseFile.SpecialistIdSpecified = false;
+                }
+                try
+                {
+                    BUcaseFile.RecommendationId = int.Parse(RecommendationID); // Henvendelse
+                    BUcaseFile.RecommendationIdSpecified = true;
+                }
+                catch (Exception ex)
+                {
+                    BUcaseFile.RecommendationIdSpecified = false;
+                }
+                try
+                {
+                    BUcaseFile.CategoryId = int.Parse(CategoryID); // Kategori
+                    BUcaseFile.CategoryIdSpecified = true;
+                }
+                catch (Exception ex)
+                {
+                    BUcaseFile.CategoryIdSpecified = false;
+                }
+                caseFile = BUcaseFile;
+            }
+            else
+            {
+                caseFile = new AcadreServiceV7.CaseFileType3();
+            }
+            caseFile.SubType = SubType; // SubType from input argument
+            caseFile.CaseFileTypeCode = caseFileTypeCode;
+            caseFile.Year = DateTime.Now.Year.ToString();
+            caseFile.CreationDate = DateTime.Now;
+            caseFile.CaseFileTitleText = personCivilRegistrationNumber; // must be set to contact cpr number for BGSAG
+            caseFile.TitleUnofficialIndicator = false;
+            caseFile.TitleAlternativeText = PrimaryContact.ContactTitle; // must be set to contact name for BGSAG
+            caseFile.RestrictedFromPublicText = caseRestrictedFromPublicText;
+            caseFile.CaseFileStatusCode = "B";
+            caseFile.CaseFileDisposalCode = caseFileDisposalCode;
+            caseFile.DeletionCode = deletionCode;
+            caseFile.AccessCode = accessCode;
+
+            caseFile.AdministrativeUnit = new AcadreServiceV7.AdministrativeUnitType[]
+                {
+                new AcadreServiceV7.AdministrativeUnitType() { AdministrativeUnitReference=administrativeUnit }
+                };
+
+            caseFile.CustomFieldCollection = new AcadreServiceV7.CustomField[]
+                {
+                    new AcadreServiceV7.CustomField(){Name = "df1",Value = caseContent}
+                    ,new AcadreServiceV7.CustomField(){Name = "df25",Value = PrimaryContact.GUID}
+                };
+
+            caseFile.Classification = new AcadreServiceV7.ClassificationType
+            {
+                Category = new AcadreServiceV7.CategoryType[] {
+                    new AcadreServiceV7.CategoryType(){ Principle="KL Koder", Literal = journalizingCode }
+                       ,new AcadreServiceV7.CategoryType(){ Principle="Facetter", Literal = facet }
+                   }
+            };
+
+            if (caseFileTypeCode == "BUSAG")
+            {
+                var child = CPRBrokerService.GetChild(personCivilRegistrationNumber);
+                // Forældre skal også med som kontakter
+                var parents = new List<SimplePerson>();
+                parents.AddRange(child.Mom ?? new SimplePerson[] { }); parents.AddRange(child.Dad ?? new SimplePerson[] { });
+                var parentsGUI = new List<string>();
+                foreach (var parent in parents)
+                {
+                    parentsGUI.Add(GetCreateAcadreContact(parent.CPR).GUID);
+                }
+                // Barnet tilføjes som primær part og forældre tilføjes som parter
+                caseFile.Party = new AcadreServiceV7.PartyType[1 + parentsGUI.Count];
+                caseFile.Party[0] = new AcadreServiceV7.PartyType()
+                {
+                    CreationDate = DateTime.Now,
+                    ContactReference = PrimaryContact.GUID,
+                    PublicAccessLevelReference = "3",
+                    IsPrimary = true
+                };
+                int i = 1;
+                foreach (var parentGUI in parentsGUI)
+                {
+                    caseFile.Party[i] = new AcadreServiceV7.PartyType()
+                    {
+                        CreationDate = DateTime.Now,
+                        ContactReference = parentGUI,
+                        PublicAccessLevelReference = "3",
+                        IsPrimary = false
+                    };
+                    i++;
+                }
+            }
+            else
+                caseFile.Party = new AcadreServiceV7.PartyType[] { new AcadreServiceV7.PartyType() {
+                CreationDate = DateTime.Now
+                ,ContactReference = PrimaryContact.GUID
+                ,PublicAccessLevelReference = "3"
+                ,IsPrimary = true
+            } };
+
+            var userList = configurationService.GetUserList(
+                new AcadreServiceV7.EmptyRequestType()).ToList();
+            var user = userList.SingleOrDefault(u => u.Initials == caseResponsible);
+            if (user != null)
+            {
+                caseFile.CaseFileManagerReference = user.Id;
+            }
+
+            createCaseRequest.CaseFile = caseFile;
+
+            var createCaseResponse = caseService.CreateCase(createCaseRequest);
+            // check for multicase (samlesag) response.
+            if (createCaseResponse.CreateCaseAndAMCResult == AcadreServiceV7.CreateCaseAndAMCResultType.CaseNotCreatedAndListAMCReceived)
+            {
+                // create the case in all the multicases
+                createCaseRequest.MultiCaseIdentifiers = createCaseResponse.MultiCaseIdentifiers;
+                createCaseResponse = createCaseResponse = caseService.CreateCase(createCaseRequest);
+            }
+
+            return createCaseResponse.CaseFileIdentifier;
+        }
+
+        private AcadreServiceV7.ContactSearchResponseType GetCreateAcadreContact(string CPR)
+        {
+            var Contact = new AcadreServiceV7.ContactSearchResponseType();
+            Contact.ContactTypeName = "Person";
+            var searchContactCriterion = new AcadreServiceV7.SearchContactCriterionType2();
+            searchContactCriterion.ContactTypeName = "Person";
+            searchContactCriterion.SearchTerm = CPR;
+            var foundContacts = contactService.SearchContacts(searchContactCriterion);
+            if (foundContacts.Length > 0)
+            {
+                // contact already exists, read GUID and name
+                Contact = foundContacts.First();
+            }
+            else
+            {
+                // forsøger at finde CPR i CPR Broker
+                SimplePerson simplePerson;
+                try
+                {
+                    simplePerson = CPRBrokerService.GetSimplePersonByCPR(CPR);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("CPR-nummeret (" + CPR + ") kunne ikke findes i CPR-registret", e);
+                }
+                // contact doesn't exist - create it and assign GUID
+                var contact = new AcadreServiceV7.PersonType2();
+                contact.PersonCivilRegistrationIdentifierStatusCode = "0";
+                contact.PersonCivilRegistrationIdentifier = CPR;
+                contact.PersonNameForAddressingName = Contact.ContactTitle = simplePerson.FullName;
+                Contact.GUID = contactService.CreateContact(contact);
+            }
+            return Contact;
         }
     }
 }
