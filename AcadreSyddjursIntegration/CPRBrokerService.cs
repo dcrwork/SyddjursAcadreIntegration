@@ -38,6 +38,7 @@ namespace AcadreLib
 
             Address address = wrapper.GetAddress(OutputItem);
             CPRBroker.RegisterOplysningType registerOplysning = null;
+            // Idet navne og adresse beskyttelse tit fremskrives til en bestemt periode, så tjekkes det at den aktive periode anvendes
             foreach (var RegisterOplysning in OutputItem.AttributListe.RegisterOplysning)
             {
                 DateTime Fra;
@@ -61,10 +62,19 @@ namespace AcadreLib
                 if (Fra < DateTime.Now && Til > DateTime.Now)
                 { registerOplysning = RegisterOplysning; break; }
             }
-
-            simplePerson.NameAddressProtection = ((CPRBroker.CprBorgerType)registerOplysning.Item).NavneAdresseBeskyttelseIndikator;
-            simplePerson.Address = address;
-            simplePerson.CPR = ((CPRBroker.CprBorgerType)OutputItem.AttributListe.RegisterOplysning[0].Item).PersonCivilRegistrationIdentifier;
+            if (registerOplysning == null)
+                registerOplysning = OutputItem.AttributListe.RegisterOplysning[0];
+            if (OutputItem.TilstandListe.LivStatus.LivStatusKode.ToString() == "Doed")
+            {
+                simplePerson.NameAddressProtection = false;
+                simplePerson.Address = new Address() { AddressLine1 = "(Død)"};
+            }
+            else
+            {
+                simplePerson.NameAddressProtection = ((CPRBroker.CprBorgerType)registerOplysning.Item).NavneAdresseBeskyttelseIndikator;
+                simplePerson.Address = address;
+            }
+            simplePerson.CPR = ((CPRBroker.CprBorgerType)registerOplysning.Item).PersonCivilRegistrationIdentifier;
             return simplePerson;
         }
         public Child GetChild(string cpr)

@@ -84,7 +84,8 @@ namespace AcadreLib
 
             List<ChildCase> childCases = new List<ChildCase>();
             var userList = configurationService.GetUserList(new AcadreServiceV7.EmptyRequestType()).ToList(); // Herfra kan CaseManager aflæses. Listen indeholder alle brugere i Acadre som ikke er ophørte.
-            
+            var UnknownUser = new AcadreServiceV7.UserType() { Initials = "", Name = "", Id = "" };
+
             AcadreServiceV7.AdvancedCaseSearchRequestType3 advancedCaseSearchRequestType = new AcadreServiceV7.AdvancedCaseSearchRequestType3();
 
             // For at sænke risikoen for at ramme de max 100 sager, så splittes søgningen op i åbne og lukkede sager
@@ -134,19 +135,36 @@ namespace AcadreLib
                 {
                     return childCases;
                 }
-                else if (foundContactsGUI.Length == 100)
+                else if (foundContactsGUI.Length > 10)
                 {
-                    var foundContacts = PWIservice.SearchContacts(searchCriterion.PrimaryContactsName);
-                    if (foundContacts.Count() == 500)
-                        return childCases;
-                    foundContactsGUI = foundContacts.Where(x=>x.ContactType == 3).Select(x=>x.Id).ToArray();
+                    // Brug Acadre PWI i stedet
+                    var AcadreCases = PWIservice.SearchCases(searchCriterion);
+                    // Add to list
+                    foreach (var AcadreCase in AcadreCases)
+                    {
+                        var user = userList.SingleOrDefault(ut => ut.Id == AcadreCase.ResponsibleUserId.ToString()) ?? UnknownUser;
+
+                        childCases.Add(new ChildCase()
+                        {
+                            CaseID = AcadreCase.Id,
+                            ChildName = AcadreCase.Description,
+                            ChildCPR = AcadreCase.Title,
+                            CaseManagerInitials = user.Initials,
+                            CaseManagerName = user.Name,
+                            CaseContent = AcadreCase.Content,
+                            IsClosed = AcadreCase.Status.IsClosed,
+                            Note = "",
+                            CaseNumberIdentifier = AcadreCase.Year.ToString().Substring(2, 2) + "/" + AcadreCase.SequenceNumber
+                        });
+                    }
+                    return childCases;
                 }
             }
 
             // CPR er valgfrit søgekriterie
             advancedCaseSearchRequestType.Title = searchCriterion.ChildCPR;
 
-            var UnknownUser = new AcadreServiceV7.UserType() { Initials = "", Name = "", Id = "" };
+            
             var foundCases = new List<AcadreServiceV7.CaseFileType3>();
             foreach (var PrimaryContactGUI in foundContactsGUI)
             {
@@ -166,7 +184,7 @@ namespace AcadreLib
                     if(result.Length == 100)
                     {
                         // Brug Acadre PWI i stedet
-                        var AcadreCases = PWIservice.SearchCases(searchCriterion, advancedCaseSearchRequestType.ResponsibleUserId);
+                        var AcadreCases = PWIservice.SearchCases(searchCriterion);
                         // Add to list
                         foreach(var AcadreCase in AcadreCases)
                         {
@@ -186,7 +204,6 @@ namespace AcadreLib
                             });
                         }
                         return childCases;
-                        // OBS! return
                     }
                     foundCases.AddRange(result);
                 }
@@ -630,6 +647,10 @@ namespace AcadreLib
                 if (user.Initials == oldCaseManagerInitials || oldCaseManagerInitials == "" || user.Initials == "")
                 {
                     Case.CaseFileManagerReference = newUser.Id;
+                    Case.AdministrativeUnit = new AcadreServiceV7.AdministrativeUnitType[]
+                    {
+                        new AcadreServiceV7.AdministrativeUnitType() { AdministrativeUnitReference = newAcadreOrgID.ToString()}
+                    };
                     try
                     {
                         caseService.UpdateCase(Case);

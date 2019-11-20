@@ -79,7 +79,7 @@ namespace AcadrePWI.Acadre
             return acadrePWIContacts;
         }
 
-        public IEnumerable<AcadrePWIcase> SearchCases(SearchCriterion searchCriterion, string CaseManagerId)
+        public IEnumerable<AcadrePWIcase> SearchCases(SearchCriterion searchCriterion)
         {
             List<AcadrePWIcase> acadrePWIcases = new List<AcadrePWIcase>();
             var request = new RestRequest("/Frontend/api/v8/case", Method.GET);
@@ -102,7 +102,7 @@ namespace AcadrePWI.Acadre
                     break;
                 i++;
             }
-            return acadrePWIcases.Where(x => (x.ResponsibleUserName == CaseManagerId || CaseManagerId == null) && (searchCriterion.AcadreOrgID == x.ResponsibleUnit.Id || searchCriterion.AcadreOrgID == 0) && (searchCriterion.ChildCPR == x.Title || searchCriterion.ChildCPR == "*") && (searchCriterion.KLE == null /*|| searchCriterion.KLE = x.Classification*/));
+            return acadrePWIcases.Where(x => (x.ResponsibleUserName == searchCriterion.CaseManagerInitials || searchCriterion.CaseManagerInitials == null) /*&& (searchCriterion.PrimaryContactsName.Replace("*","").Split(' ').Where(y=>x.Description.Contains(y)).Any() || searchCriterion.PrimaryContactsName == "")*/ && (searchCriterion.AcadreOrgID == x.ResponsibleUnit.Id || searchCriterion.AcadreOrgID == 0) && (searchCriterion.ChildCPR == x.Title || searchCriterion.ChildCPR == "*") && (searchCriterion.KLE == null /*|| searchCriterion.KLE = x.Classification*/));
         }
         public IRestResponse Execute(RestRequest restRequest)
         {
