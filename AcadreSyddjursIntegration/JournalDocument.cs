@@ -11,5 +11,6 @@ namespace AcadreLib
         public int CaseID;
         public string CaseNumberIdentifier;
         public string DocumentMemoDescription;
+        public string FileReferenceID;
     }
 }

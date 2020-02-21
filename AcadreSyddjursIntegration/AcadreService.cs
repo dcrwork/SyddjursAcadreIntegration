@@ -77,6 +77,9 @@ namespace AcadreLib
 
         public IEnumerable<ChildCase> SearchChildren(SearchCriterion searchCriterion)
         {
+            // Temp hot fix
+            if (searchCriterion.IsClosed == null) searchCriterion.IsClosed = false;
+            else if (searchCriterion.IsClosed.Value) searchCriterion.IsClosed = null;
             // Acadre PWS metoden er begrænset af at der kun kan fremsøges 100 sager af gangen. Derfor suppleres der i disse tilfælde med Acadre PWI
             // Følgende parametre kan ikke søges efter gennem API:
             // 1. KLE
@@ -243,7 +246,8 @@ namespace AcadreLib
             SearchCriterion searchCriterion = new SearchCriterion()
             {
                 ChildCPR = CPR,
-                CaseContent = "Løbende journal*"
+                CaseContent = "Løbende journal*",
+                IsClosed = true
             };
             IEnumerable<ChildCase> childCases = SearchChildren(searchCriterion);
             foreach (var childCase in childCases)
@@ -263,6 +267,7 @@ namespace AcadreLib
             Child child = new Child();
             AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
             var user = GetUser(Case.CaseFileManagerReference);
+            user = user ?? new AcadreServiceV7.UserType() { Initials = "", Name = "", Id = Case.CaseFileManagerReference };
             child = CPRBrokerService.GetChild(Case.CaseFileTitleText);
 
             child.Note = Case.Note;
@@ -282,7 +287,8 @@ namespace AcadreLib
                 SearchCriterion searchCriterion = new SearchCriterion()
                 {
                     ChildCPR = CPR,
-                    CaseContent = "Løbende journal*"
+                    CaseContent = "Løbende journal*",
+                    IsClosed = true
                 };
                 IEnumerable<ChildCase> childCases = SearchChildren(searchCriterion);
 
@@ -498,6 +504,7 @@ namespace AcadreLib
                 //    txtRange = new TextRange(document.ContentStart, document.ContentEnd);
                 //    txtRange.Load(stream, DataFormats.Rtf);
                 //}
+                
                 journalDocuments.Add(new JournalDocument
                 {
                     Type = "Memo",
@@ -506,7 +513,8 @@ namespace AcadreLib
                     LastChangedDate = memo.MemoEventDate,
                     CaseID = CaseID,
                     CaseNumberIdentifier = Case.CaseFileNumberIdentifier,
-                    DocumentMemoDescription = "" // txtRange.Text // Her skal der bruges indholdet af notatet
+                    DocumentMemoDescription = "", // txtRange.Text // Her skal der bruges indholdet af notatet
+                    FileReferenceID = memo.MemoFileReference
                 });
             }
 
@@ -528,7 +536,8 @@ namespace AcadreLib
                     LastChangedDate = document.Record.RegistrationDate,
                     CaseID = CaseID,
                     CaseNumberIdentifier = Case.CaseFileNumberIdentifier,
-                    DocumentMemoDescription = document.Record.DescriptionText
+                    DocumentMemoDescription = document.Record.DescriptionText,
+                    FileReferenceID = document.DocumentVersion.DocumentFileReference
                 });
             }
             return journalDocuments;
