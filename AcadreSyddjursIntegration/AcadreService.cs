@@ -371,7 +371,7 @@ namespace AcadreLib
             caseFile.Year = DateTime.Now.Year.ToString();
             caseFile.CreationDate = DateTime.Now;
             caseFile.CaseFileTitleText = CPR;
-            caseFile.TitleAlternativeText = PrimaryContact.ContactTitle;
+            caseFile.TitleAlternativeText = childinfo.SimpleChild.FullName;
             caseFile.RestrictedFromPublicText = PublicationRestriction;
             caseFile.CaseFileStatusCode = CaseStatus;
             caseFile.CaseFileDisposalCode = CaseDisposalCode;
@@ -760,7 +760,8 @@ namespace AcadreLib
                 contactService.SearchContacts(searchContactCriterion);
 
             var PrimaryContact = GetCreateAcadreContact(personCivilRegistrationNumber);
-
+            var simplePerson = CPRBrokerService.GetSimplePersonByCPR(personCivilRegistrationNumber);
+            
             // create the case
             var createCaseRequest = new AcadreServiceV7.CreateCaseRequestType();
 
@@ -807,7 +808,7 @@ namespace AcadreLib
             caseFile.CreationDate = DateTime.Now;
             caseFile.CaseFileTitleText = personCivilRegistrationNumber; // must be set to contact cpr number for BGSAG
             caseFile.TitleUnofficialIndicator = false;
-            caseFile.TitleAlternativeText = PrimaryContact.ContactTitle; // must be set to contact name for BGSAG
+            caseFile.TitleAlternativeText = simplePerson.FullName; // must be set to contact name for BGSAG
             caseFile.RestrictedFromPublicText = caseRestrictedFromPublicText;
             caseFile.CaseFileStatusCode = "B";
             caseFile.CaseFileDisposalCode = caseFileDisposalCode;
