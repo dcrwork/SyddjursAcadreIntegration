@@ -37,16 +37,50 @@ namespace AcadreLib
             simplePerson.Surname = OutputItem.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonSurnameName;
 
             Address address = wrapper.GetAddress(OutputItem);
-
-            simplePerson.NameAddressProtection = ((CPRBroker.CprBorgerType)OutputItem.AttributListe.RegisterOplysning[0].Item).NavneAdresseBeskyttelseIndikator;
-            simplePerson.Address = address;
-            simplePerson.CPR = ((CPRBroker.CprBorgerType)OutputItem.AttributListe.RegisterOplysning[0].Item).PersonCivilRegistrationIdentifier;
+            CPRBroker.RegisterOplysningType registerOplysning = null;
+            // Idet navne og adresse beskyttelse tit fremskrives til en bestemt periode, så tjekkes det at den aktive periode anvendes
+            foreach (var RegisterOplysning in OutputItem.AttributListe.RegisterOplysning)
+            {
+                DateTime Fra;
+                DateTime Til;
+                try
+                {
+                    Fra = (DateTime)RegisterOplysning.Virkning.FraTidspunkt.Item;
+                }
+                catch
+                {
+                    Fra = DateTime.MinValue;
+                }
+                try
+                {
+                    Til = (DateTime)RegisterOplysning.Virkning.TilTidspunkt.Item;
+                }
+                catch
+                {
+                    Til = DateTime.MaxValue;
+                }
+                if (Fra < DateTime.Now && Til > DateTime.Now)
+                { registerOplysning = RegisterOplysning; break; }
+            }
+            if (registerOplysning == null)
+                registerOplysning = OutputItem.AttributListe.RegisterOplysning[0];
+            if (OutputItem.TilstandListe.LivStatus.LivStatusKode.ToString() == "Doed")
+            {
+                simplePerson.NameAddressProtection = false;
+                simplePerson.Address = new Address() { AddressLine1 = "(Død)"};
+            }
+            else
+            {
+                simplePerson.NameAddressProtection = ((CPRBroker.CprBorgerType)registerOplysning.Item).NavneAdresseBeskyttelseIndikator;
+                simplePerson.Address = address;
+            }
+            simplePerson.CPR = ((CPRBroker.CprBorgerType)registerOplysning.Item).PersonCivilRegistrationIdentifier;
             return simplePerson;
         }
         public Child GetChild(string cpr)
         {            
             Child child = new Child();
-            List<SimplePerson> siblings = new List<SimplePerson>();
+            List<Child> siblings = new List<Child>();
             CPRBroker.PersonFlerRelationType[] FatherChildren = null;
             CPRBroker.PersonFlerRelationType[] MotherChildren = null;
             CPRBroker.RegistreringType1 FatherOutput;
@@ -98,12 +132,15 @@ namespace AcadreLib
                         if (MotherChild.ReferenceID.Item == FatherChild.ReferenceID.Item && MotherChild.ReferenceID.Item != ChildUUID)
                         {
                             var SiblingOutput = wrapper.GetItem(MotherChild.ReferenceID.Item);
-                            siblings.Add(new SimplePerson()
+                            siblings.Add(new Child()
                             {
-                                FirstName = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonGivenName,
-                                MiddleName = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonMiddleName,
-                                Surname = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonSurnameName,
-                                CPR = ((CPRBroker.CprBorgerType)SiblingOutput.AttributListe.RegisterOplysning[0].Item).PersonCivilRegistrationIdentifier
+                                SimpleChild = new SimplePerson()
+                                {
+                                    FirstName = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonGivenName,
+                                    MiddleName = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonMiddleName,
+                                    Surname = SiblingOutput.AttributListe.Egenskab[0].NavnStruktur.PersonNameStructure.PersonSurnameName,
+                                    CPR = ((CPRBroker.CprBorgerType)SiblingOutput.AttributListe.RegisterOplysning[0].Item).PersonCivilRegistrationIdentifier
+                                }
                             });
                         }
                     }
@@ -116,11 +153,11 @@ namespace AcadreLib
                 List<string> CustodyOwnersNames = new List<string>();
                 foreach (var custodyOwner in ChildOutput.RelationListe.Foraeldremyndighedsindehaver)
                 {
-                    if (custodyOwner == ChildOutput.RelationListe.Fader[0])
+                    if (custodyOwner == (ChildOutput.RelationListe.Fader ?? new CPRBroker.PersonRelationType[] {}).FirstOrDefault())
                     {
                         CustodyOwnersNames.Add(child.Dad.First().FullName);
                     }
-                    else if (custodyOwner == ChildOutput.RelationListe.Moder[0])
+                    else if (custodyOwner == (ChildOutput.RelationListe.Moder ?? new CPRBroker.PersonRelationType[] { }).FirstOrDefault())
                     {
                         CustodyOwnersNames.Add(child.Mom.First().FullName);
                     }
