@@ -24,7 +24,11 @@ namespace AcadreLib
 
             var laesResultatItem = wrapper.GetItem(wrapper.GetUuid(cpr).UUID);
 
-            return GetSimplePersonByItem(laesResultatItem);
+            simplePerson = GetSimplePersonByItem(laesResultatItem);
+
+            simplePerson.CPR = cpr;
+
+            return simplePerson;
         }
 
         public SimplePerson GetSimplePersonByItem(CPRBroker.RegistreringType1 OutputItem)

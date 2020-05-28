@@ -926,7 +926,15 @@ namespace AcadreLib
                 var contact = new AcadreServiceV7.PersonType2();
                 contact.PersonCivilRegistrationIdentifierStatusCode = "0";
                 contact.PersonCivilRegistrationIdentifier = CPR;
-                contact.PersonNameForAddressingName = Contact.ContactTitle = simplePerson.FullName;
+                contact.PersonNameForAddressingName = 
+                    Contact.ContactTitle = simplePerson.FullName;
+                contact.PersonNameStructure = new AcadreServiceV7.PersonNameStructureType()
+                {
+                    PersonGivenName = new[] { simplePerson.FirstName },
+                    PersonMiddleName = new[] { simplePerson.MiddleName },
+                    PersonSurnameName = new[] { simplePerson.Surname }
+                };
+
                 Contact.GUID = contactService.CreateContact(contact);
             }
             return Contact;
