@@ -78,8 +78,8 @@ namespace AcadreLib
         public IEnumerable<ChildCase> SearchChildren(SearchCriterion searchCriterion)
         {
             // Temp hot fix
-            if (searchCriterion.IsClosed == null) searchCriterion.IsClosed = false;
-            else if (searchCriterion.IsClosed.Value) searchCriterion.IsClosed = null;
+            // if (searchCriterion.IsClosed == null) searchCriterion.IsClosed = false;
+            // else if (searchCriterion.IsClosed.Value) searchCriterion.IsClosed = null;
             // Acadre PWS metoden er begrænset af at der kun kan fremsøges 100 sager af gangen. Derfor suppleres der i disse tilfælde med Acadre PWI
             // Følgende parametre kan ikke søges efter gennem API:
             // 1. KLE
@@ -192,7 +192,7 @@ namespace AcadreLib
                         foreach(var AcadreCase in AcadreCases)
                         {
                             var user = userList.SingleOrDefault(ut => ut.Id == AcadreCase.ResponsibleUserId.ToString()) ?? UnknownUser;
-
+                            
                             childCases.Add(new ChildCase()
                             {
                                 CaseID = AcadreCase.Id,
@@ -445,6 +445,7 @@ namespace AcadreLib
             List<ChildCase> childCases = new List<ChildCase>();
             AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
             string CPR = Case.CaseFileTitleText;
+            string ChildAltName = "";
             
             AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
             searchCriterion.CaseFileTitleText = CPR;
@@ -453,6 +454,16 @@ namespace AcadreLib
             foreach (AcadreServiceV7.CaseSearchResponseType foundCase in caseService.SearchCases(searchCriterion))
             {
                 Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(foundCase.CaseFileReference);
+                // Hvis barnets navn er tomt så skriv "Barn af <Mors navn>"
+                if (Case.TitleAlternativeText == "" || Case.TitleAlternativeText == "(unavngivet)")
+                {
+                    if (ChildAltName == "")
+                    {
+                        var Child = CPRBrokerService.GetChild(CPR);
+                        ChildAltName = "Barn af " + (Child.Mom.FirstOrDefault() ?? new SimplePerson() { FirstName = "Ukendt" }).FullName.Trim();
+                    }
+                    Case.TitleAlternativeText = ChildAltName;
+                }
                 var user = userList.SingleOrDefault(ut => ut.Id == Case.CaseFileManagerReference);
                 if (user == null)
                 {
@@ -897,6 +908,44 @@ namespace AcadreLib
             return createCaseResponse.CaseFileIdentifier;
         }
 
+        public IEnumerable<Party> GetCaseParties(int CaseID)
+        {
+            var parties = new List<Party>();
+            var caseinfo = caseService.GetCase(CaseID.ToString());
+            foreach(var caseParty in caseinfo.Party)
+            {
+                var contact = (AcadreServiceV7.PersonType2)contactService.GetContact(caseParty.ContactReference);
+                parties.Add(new Party()
+                {
+                    isPrimary = caseParty.IsPrimarySpecified ? caseParty.IsPrimary : false,
+                    comment = caseParty.PartyComment ?? "",
+                    contactGUI = caseParty.ContactReference,
+                    role = caseParty.PartyRelationTypeLiteral ?? "",
+                    CPR = contact.PersonCivilRegistrationIdentifier,
+                    name = String.Join(" ",contact.PersonNameStructure.PersonGivenName.
+                                            Concat(contact.PersonNameStructure.PersonMiddleName).
+                                            Concat(contact.PersonNameStructure.PersonSurnameName).
+                                            Where(x=>x != "")
+                                            )
+                    //name = String.Concat(contact.PersonNameStructure.PersonGivenName) + (String.Concat(contact.PersonNameStructure.PersonMiddleName) == "" ? "" : " " + String.Concat(contact.PersonNameStructure.PersonMiddleName)) + (String.Concat(contact.PersonNameStructure.PersonSurnameName) == "" ? "" : " " + String.Concat(contact.PersonNameStructure.PersonSurnameName))
+                });
+                //AcadreServiceV7.PartyType
+            }
+            return parties;
+        }
+        public void AddParty(int CaseID,string CPR,string role)
+        {
+            var caseinfo = caseService.GetCase(CaseID.ToString());
+            var contact = GetCreateAcadreContact(CPR);
+            caseinfo.Party = caseinfo.Party.Concat(new AcadreServiceV7.PartyType[] {new AcadreServiceV7.PartyType{
+                    CreationDate = DateTime.Now
+                    ,ContactReference = contact.GUID
+                    ,PublicAccessLevelReference = "3"
+                    ,IsPrimary = false
+                    ,PartyRelationTypeLiteral = role
+                } }).ToArray();
+            caseService.UpdateCase(caseinfo);
+        }
         private AcadreServiceV7.ContactSearchResponseType GetCreateAcadreContact(string CPR)
         {
             var Contact = new AcadreServiceV7.ContactSearchResponseType();

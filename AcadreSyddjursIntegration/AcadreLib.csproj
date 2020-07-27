@@ -63,16 +63,17 @@
     <Compile Include="Acadre\ContactService.cs" />
     <Compile Include="Acadre\PWSSoapHeader.cs" />
     <Compile Include="Address.cs" />
-    <Compile Include="Child.cs" />
-    <Compile Include="ChildCase.cs" />
+    <Compile Include="Data models\Child.cs" />
+    <Compile Include="Data models\ChildCase.cs" />
     <Compile Include="AcadreService.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CPRBrokerService.cs" />
     <Compile Include="CPRBrokerWrapper.cs" />
-    <Compile Include="JournalDocument.cs" />
+    <Compile Include="Data models\JournalDocument.cs" />
     <Compile Include="Library.cs" />
-    <Compile Include="MemoRequest.cs" />
-    <Compile Include="SimplePerson.cs" />
+    <Compile Include="Data models\MemoRequest.cs" />
+    <Compile Include="Data models\Party.cs" />
+    <Compile Include="Data models\SimplePerson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -80,7 +81,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="PWSSoapHeader.cs" />
-    <Compile Include="SearchCriterion.cs" />
+    <Compile Include="Data models\SearchCriterion.cs" />
     <Compile Include="Web References\AcadreServiceV4\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
