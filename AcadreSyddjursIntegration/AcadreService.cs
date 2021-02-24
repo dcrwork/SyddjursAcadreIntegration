@@ -77,9 +77,6 @@ namespace AcadreLib
 
         public IEnumerable<ChildCase> SearchChildren(SearchCriterion searchCriterion)
         {
-            // Temp hot fix
-            if (searchCriterion.IsClosed == null) searchCriterion.IsClosed = false;
-            else if (searchCriterion.IsClosed.Value) searchCriterion.IsClosed = null;
             // Acadre PWS metoden er begrænset af at der kun kan fremsøges 100 sager af gangen. Derfor suppleres der i disse tilfælde med Acadre PWI
             // Følgende parametre kan ikke søges efter gennem API:
             // 1. KLE
@@ -197,7 +194,7 @@ namespace AcadreLib
                             {
                                 CaseID = AcadreCase.Id,
                                 ChildName = AcadreCase.Description,
-                                ChildCPR = AcadreCase.Title,
+                                ChildCPR = AcadreCase.Title.Substring(0, 10),
                                 CaseManagerInitials = user.Initials,
                                 CaseManagerName = user.Name,
                                 CaseContent = AcadreCase.Content,
@@ -227,7 +224,7 @@ namespace AcadreLib
                 {
                     CaseID = int.Parse(foundCase.CaseFileIdentifier),
                     ChildName = foundCase.TitleAlternativeText,
-                    ChildCPR = foundCase.CaseFileTitleText,
+                    ChildCPR = foundCase.CaseFileTitleText.Substring(0, 10),
                     CaseManagerInitials = user.Initials,
                     CaseManagerName = user.Name,
                     CaseContent = foundCase.CustomFields.df1,
@@ -245,7 +242,7 @@ namespace AcadreLib
 
             SearchCriterion searchCriterion = new SearchCriterion()
             {
-                ChildCPR = CPR,
+                ChildCPR = CPR + "*",
                 CaseContent = "Løbende journal*",
                 IsClosed = true
             };
@@ -268,7 +265,7 @@ namespace AcadreLib
             AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
             var user = GetUser(Case.CaseFileManagerReference);
             user = user ?? new AcadreServiceV7.UserType() { Initials = "", Name = "", Id = Case.CaseFileManagerReference };
-            child = CPRBrokerService.GetChild(Case.CaseFileTitleText);
+            child = CPRBrokerService.GetChild(Case.CaseFileTitleText.Substring(0, 10));
 
             child.Note = Case.Note;
             child.CaseID = CaseID;
@@ -324,6 +321,7 @@ namespace AcadreLib
             int SpecialistID = 8;
             int RecommendationID = 1;
             int CategoryID = 4;
+            string KLEtitle = configurationService.GetCategoryList(new AcadreServiceV7.EmptyRequestType()).ToList().Where(x => x.Principle.Literal == "KL Koder").Where(x => x.Literal == KLE).First().Title;
 
             // Find informationer om barnet og eventuelle eksisterende sager
             var childinfo = GetChildInfo(CPR);
@@ -370,7 +368,7 @@ namespace AcadreLib
             caseFile.CaseFileTypeCode = CaseFileTypeCode;
             caseFile.Year = DateTime.Now.Year.ToString();
             caseFile.CreationDate = DateTime.Now;
-            caseFile.CaseFileTitleText = CPR;
+            caseFile.CaseFileTitleText = string.Format("{0} - {1} - {2}", CPR, childinfo.SimpleChild.FullName, KLEtitle);
             caseFile.TitleAlternativeText = childinfo.SimpleChild.FullName;
             caseFile.RestrictedFromPublicText = PublicationRestriction;
             caseFile.CaseFileStatusCode = CaseStatus;
@@ -444,7 +442,7 @@ namespace AcadreLib
         {
             List<ChildCase> childCases = new List<ChildCase>();
             AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
-            string CPR = Case.CaseFileTitleText;
+            string CPR = Case.CaseFileTitleText.Substring(0, 10);
             
             AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
             searchCriterion.CaseFileTitleText = CPR;
@@ -478,7 +476,7 @@ namespace AcadreLib
             List<JournalDocument> journalDocuments = new List<JournalDocument>();
             AcadreServiceV7.BUCaseFileType Case = (AcadreServiceV7.BUCaseFileType)caseService.GetCase(CaseID.ToString());
             AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
-            searchCriterion.CaseFileTitleText = Case.CaseFileTitleText;
+            searchCriterion.CaseFileTitleText = Case.CaseFileTitleText.Substring(0, 10) + "*";
             searchCriterion.CaseFileTypeCode = CaseFileTypeCode;
             // Henter dokumenter
             foreach (AcadreServiceV7.CaseSearchResponseType foundCase in caseService.SearchCases(searchCriterion))
@@ -641,10 +639,10 @@ namespace AcadreLib
                 }
                 return;
             }
-            string CPR = Case.CaseFileTitleText;
+            string CPR = Case.CaseFileTitleText.Substring(0, 10);
 
             AcadreServiceV7.AdvancedSearchCaseCriterionType2 searchCriterion = new AcadreServiceV7.AdvancedSearchCaseCriterionType2();
-            searchCriterion.CaseFileTitleText = CPR;
+            searchCriterion.CaseFileTitleText = CPR + "*";
             searchCriterion.CaseFileTypeCode = CaseFileTypeCode;
 
             foreach (AcadreServiceV7.CaseSearchResponseType foundCase in caseService.SearchCases(searchCriterion))
@@ -774,7 +772,7 @@ namespace AcadreLib
                     BUcaseFile.SpecialistId = int.Parse(SpecialistID); // Faggruppe
                     BUcaseFile.SpecialistIdSpecified = true;
                 }
-                catch (Exception ex)
+                catch 
                 {
                     BUcaseFile.SpecialistIdSpecified = false;
                 }
@@ -783,7 +781,7 @@ namespace AcadreLib
                     BUcaseFile.RecommendationId = int.Parse(RecommendationID); // Henvendelse
                     BUcaseFile.RecommendationIdSpecified = true;
                 }
-                catch (Exception ex)
+                catch 
                 {
                     BUcaseFile.RecommendationIdSpecified = false;
                 }
@@ -792,7 +790,7 @@ namespace AcadreLib
                     BUcaseFile.CategoryId = int.Parse(CategoryID); // Kategori
                     BUcaseFile.CategoryIdSpecified = true;
                 }
-                catch (Exception ex)
+                catch 
                 {
                     BUcaseFile.CategoryIdSpecified = false;
                 }
@@ -806,6 +804,21 @@ namespace AcadreLib
             caseFile.CaseFileTypeCode = caseFileTypeCode;
             caseFile.Year = DateTime.Now.Year.ToString();
             caseFile.CreationDate = DateTime.Now;
+            if (((IEnumerable<string>)new string[3]
+              {
+                "BUSAG",
+                "BGSAG",
+                "PERSAG"
+              }).Contains(CaseFileTypeCode))
+            {
+                var KLECategory = configurationService.GetCategoryList(new AcadreServiceV7.EmptyRequestType()).ToList().Where(x => x.Principle.Literal == "KL Koder" && x.Literal == journalizingCode).FirstOrDefault();
+                if (KLECategory == null)
+                    throw (new Exception("kunne ikke finde KLE nummer"));
+                string KLEtitle = KLECategory.Title;
+                caseFile.CaseFileTitleText = string.Format("{0} - {1} - {2}", personCivilRegistrationNumber, simplePerson.FullName, KLEtitle);
+            }
+            else
+                caseFile.CaseFileTitleText = caseFileTitleText;
             caseFile.CaseFileTitleText = personCivilRegistrationNumber; // must be set to contact cpr number for BGSAG
             caseFile.TitleUnofficialIndicator = false;
             caseFile.TitleAlternativeText = simplePerson.FullName; // must be set to contact name for BGSAG
@@ -931,5 +944,52 @@ namespace AcadreLib
             }
             return Contact;
         }
+
+        public void AddParty(int CaseID, string CPR, string role)
+        {
+            AcadreServiceV7.CaseFileType3 caseFile = caseService.GetCase(CaseID.ToString());
+            AcadreServiceV7.ContactSearchResponseType createAcadreContact = GetCreateAcadreContact(CPR);
+            caseFile.Party = ((IEnumerable<AcadreServiceV7.PartyType>)caseFile.Party)
+                .Concat(new AcadreServiceV7.PartyType[1]
+                            {
+                                new AcadreServiceV7.PartyType()
+                                {
+                                  CreationDate = DateTime.Now,
+                                  ContactReference = createAcadreContact.GUID,
+                                  PublicAccessLevelReference = "3",
+                                  IsPrimary = false,
+                                  PartyRelationTypeLiteral = role
+                                }
+                            }).ToArray();
+            caseService.UpdateCase(caseFile);
+        }
+
+        public void CloseCase(int CaseID)
+        {
+            AcadreServiceV7.CaseFileType3 caseFileType3 = caseService.GetCase(CaseID.ToString());
+            caseFileType3.CaseFileStatusCode = "A";
+            caseFileType3.ClosedDate = DateTime.Now;
+            caseService.UpdateCase(caseFileType3);
+        }
+        public IEnumerable<Party> GetCaseParties(int CaseID)
+        {
+            List<Party> partyList = new List<Party>();
+            foreach (AcadreServiceV7.PartyType partyType in this.caseService.GetCase(CaseID.ToString()).Party)
+            {
+                AcadreServiceV7.PersonType2 contact = (AcadreServiceV7.PersonType2)contactService.GetContact(partyType.ContactReference);
+                partyList.Add(new Party()
+                {
+                    isPrimary = partyType.IsPrimarySpecified && partyType.IsPrimary,
+                    comment = partyType.PartyComment ?? "",
+                    contactGUI = partyType.ContactReference,
+                    role = partyType.PartyRelationTypeLiteral ?? "",
+                    CPR = contact.PersonCivilRegistrationIdentifier,
+                    name = string.Join(" ", ((IEnumerable<string>)contact.PersonNameStructure.PersonGivenName).Concat(contact.PersonNameStructure.PersonMiddleName).Concat(contact.PersonNameStructure.PersonSurnameName).Where(x => x != ""))
+                });
+            }
+            return partyList;
+        }
     }
+
+    
 }

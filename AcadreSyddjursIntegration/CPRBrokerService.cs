@@ -121,6 +121,11 @@ namespace AcadreLib
                     MotherChildren = MotherOutput.RelationListe.Boern;
                 }
                 child.Mom = Mothers;
+                if (child.SimpleChild.FullName == " ")
+                {
+                    child.SimpleChild.FirstName = "Barn af";
+                    child.SimpleChild.Surname = Mothers[0].FullName;
+                }
             }
             // Søskende (Har samme far og mor)
             if (FatherChildren != null && MotherChildren != null)
